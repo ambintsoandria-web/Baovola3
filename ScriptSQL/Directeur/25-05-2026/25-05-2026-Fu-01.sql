@@ -5,7 +5,7 @@
 
 BEGIN;
 
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
+-- CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TABLE IF NOT EXISTS types_contrats_employes (
 	id          SERIAL PRIMARY KEY,
