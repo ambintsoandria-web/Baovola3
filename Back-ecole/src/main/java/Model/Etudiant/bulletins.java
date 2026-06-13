@@ -2,19 +2,46 @@ package Model.Etudiant;
 
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "bulletins")
 public class bulletins {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @ManyToOne
     private profils_etudiants etudiant;
+
+    @ManyToOne
     private inscriptions inscription;
+
+    @ManyToOne
     private periodes periode;
+
+    @Column(name = "libelle_periode", length = 100)
     private String libellePeriode;
+
+    @Column(name = "annee_scolaire", length = 50)
     private String anneeScolaire;
+
+    @Column(name = "etablissement", length = 255)
     private String etablissement;
+
+    @Column(name = "appreciation", columnDefinition = "TEXT")
     private String appreciation;
+
+    @Column(name = "moyenne_generale")
     private Double moyenneGenerale;
+
+    @Column(name = "rang")
     private Integer rang;
+
+    @Column(name = "effectif_classe")
     private Integer effectifClasse;
+
+    @Transient
     private List<moyennes> lignesMoyennes = new ArrayList<>();
 
     public bulletins() {

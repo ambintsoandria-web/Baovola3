@@ -2,25 +2,65 @@ package Model.Etudiant;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "profils_professeurs")
 public class profils_professeurs {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "user_id", unique = true)
     private Integer userId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private Users user;
+
+    @Column(name = "matricule", length = 100, unique = true, nullable = false)
     private String matricule;
+
+    @Column(name = "nom", length = 150, nullable = false)
     private String nom;
+
+    @Column(name = "prenom", length = 150, nullable = false)
     private String prenom;
+
+    @Column(name = "date_naissance")
     private LocalDate dateNaissance;
+
+    @Column(name = "sexe", length = 1)
     private String sexe;
+
+    @Column(name = "photo_url", length = 500)
     private String photoUrl;
+
+    @Column(name = "telephone", length = 50)
     private String telephone;
+
+    @Column(name = "adresse", columnDefinition = "TEXT")
     private String adresse;
+
+    @Column(name = "specialite", length = 200)
     private String specialite;
+
+    @Column(name = "type_contrat", length = 50)
     private String typeContrat;
+
+    @Column(name = "date_debut_contrat")
     private LocalDate dateDebutContrat;
+
+    @Column(name = "date_fin_contrat")
     private LocalDate dateFinContrat;
+
+    @Column(name = "is_archived")
     private Boolean archived;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     public profils_professeurs() {

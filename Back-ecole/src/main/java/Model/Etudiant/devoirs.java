@@ -2,22 +2,58 @@ package Model.Etudiant;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "devoirs")
 public class devoirs {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "affectation_id")
     private Integer affectationId;
+
+    @ManyToOne
+    @JoinColumn(name = "affectation_id", insertable = false, updatable = false)
     private affectations_enseignement affectation;
+
+    @Column(name = "periode_id")
     private Integer periodeId;
+
+    @ManyToOne
+    @JoinColumn(name = "periode_id", insertable = false, updatable = false)
     private periodes periode;
+
+    @Column(name = "titre", length = 255)
     private String titre;
+
+    @Column(name = "consigne", columnDefinition = "TEXT")
     private String consigne;
+
+    @Column(name = "date_publication")
     private LocalDate datePublication;
+
+    @Column(name = "date_limite")
     private LocalDate dateLimite;
+
+    @Column(name = "statut", length = 50)
     private String statut;
+
+    @Column(name = "piece_jointe_url", length = 500)
     private String pieceJointeUrl;
+
+    @Column(name = "saisi_par")
     private Integer saisiPar;
+
+    @ManyToOne
+    @JoinColumn(name = "saisi_par", insertable = false, updatable = false)
     private Users saisiParUser;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     public devoirs() {

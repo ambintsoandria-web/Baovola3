@@ -2,20 +2,53 @@ package Model.Etudiant;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "moyennes")
 public class moyennes {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "etudiant_id")
     private Integer etudiantId;
+
+    @ManyToOne
+    @JoinColumn(name = "etudiant_id", insertable = false, updatable = false)
     private profils_etudiants etudiant;
+
+    @Column(name = "inscription_id")
     private Integer inscriptionId;
+
+    @ManyToOne
+    @JoinColumn(name = "inscription_id", insertable = false, updatable = false)
     private inscriptions inscription;
+
+    @Column(name = "periode_id")
     private Integer periodeId;
+
+    @ManyToOne
+    @JoinColumn(name = "periode_id", insertable = false, updatable = false)
     private periodes periode;
+
+    @Column(name = "matiere_id")
     private Integer matiereId;
+
+    @ManyToOne
+    @JoinColumn(name = "matiere_id", insertable = false, updatable = false)
     private matieres matiere;
+
+    @Column(name = "valeur", precision = 5, scale = 2)
     private BigDecimal valeur;
+
+    @Column(name = "rang")
     private Integer rang;
+
+    @Column(name = "effectif_classe")
     private Integer effectifClasse;
+
+    @Column(name = "calculated_at")
     private LocalDateTime calculatedAt;
 
     public moyennes() {

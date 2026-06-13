@@ -1,21 +1,55 @@
 package Model.Etudiant;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "demandes_modification_dossier")
 public class demandes_modification_dossier {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "etudiant_id")
     private Integer etudiantId;
+
+    @ManyToOne
+    @JoinColumn(name = "etudiant_id", insertable = false, updatable = false)
     private profils_etudiants etudiant;
+
+    @Column(name = "champ_modifie", length = 100)
     private String champModifie;
+
+    @Column(name = "ancienne_valeur", columnDefinition = "TEXT")
     private String ancienneValeur;
+
+    @Column(name = "nouvelle_valeur", columnDefinition = "TEXT")
     private String nouvelleValeur;
+
+    @Column(name = "motif", columnDefinition = "TEXT")
     private String motif;
+
+    @Column(name = "statut", length = 50)
     private String statut;
+
+    @Column(name = "soumis_par")
     private Integer soumisPar;
+
+    @ManyToOne
+    @JoinColumn(name = "soumis_par", insertable = false, updatable = false)
     private Users soumisParUser;
+
+    @Column(name = "traite_par")
     private Integer traitePar;
+
+    @ManyToOne
+    @JoinColumn(name = "traite_par", insertable = false, updatable = false)
     private Users traiteParUser;
+
+    @Column(name = "date_traitement")
     private LocalDateTime dateTraitement;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     public demandes_modification_dossier() {

@@ -2,26 +2,68 @@ package Model.Etudiant;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "profils_etudiants")
 public class profils_etudiants {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "user_id", unique = true)
     private Integer userId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private Users user;
+
+    @Column(name = "matricule", length = 100, unique = true, nullable = false)
     private String matricule;
+
+    @Column(name = "nom", length = 150, nullable = false)
     private String nom;
+
+    @Column(name = "prenom", length = 150, nullable = false)
     private String prenom;
+
+    @Column(name = "date_naissance")
     private LocalDate dateNaissance;
+
+    @Column(name = "lieu_naissance", length = 200)
     private String lieuNaissance;
+
+    @Column(name = "sexe", length = 1)
     private String sexe;
+
+    @Column(name = "photo_url", length = 500)
     private String photoUrl;
+
+    @Column(name = "adresse", columnDefinition = "TEXT")
     private String adresse;
+
+    @Column(name = "commune", length = 150)
     private String commune;
+
+    @Column(name = "region", length = 150)
     private String region;
+
+    @Column(name = "nationalite", length = 100)
     private String nationalite;
+
+    @Column(name = "cin", length = 50)
     private String cin;
+
+    @Column(name = "telephone", length = 50)
     private String telephone;
+
+    @Column(name = "is_archived")
     private Boolean archived;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     public profils_etudiants() {

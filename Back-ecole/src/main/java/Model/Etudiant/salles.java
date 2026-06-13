@@ -1,14 +1,31 @@
 package Model.Etudiant;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "salles")
 public class salles {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "etablissement_id")
     private Integer etablissementId;
+
+    @Column(name = "nom", length = 100, nullable = false)
     private String nom;
+
+    @Column(name = "capacite")
     private Integer capacite;
+
+    @Column(name = "type", length = 50)
     private String type;
+
+    @Column(name = "is_active")
     private Boolean active;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     public salles() {
