@@ -16,6 +16,7 @@ public class UserRole {
     private Long roleId;
 
     // Getters et Setters
+    //
     public Long getId() {
         return id;
     }
