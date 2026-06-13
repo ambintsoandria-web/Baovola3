@@ -2,14 +2,31 @@ package Model.Etudiant;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "annees_scolaires")
 public class annees_scolaires {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "etablissement_id")
     private Integer etablissementId;
+
+    @Column(name = "libelle", length = 50, nullable = false)
     private String libelle;
+
+    @Column(name = "date_debut")
     private LocalDate dateDebut;
+
+    @Column(name = "date_fin")
     private LocalDate dateFin;
+
+    @Column(name = "est_active")
     private Boolean active;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     public annees_scolaires() {

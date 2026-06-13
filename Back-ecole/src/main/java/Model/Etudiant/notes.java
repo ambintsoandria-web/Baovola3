@@ -2,29 +2,81 @@ package Model.Etudiant;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "notes")
 public class notes {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "etudiant_id")
     private Integer etudiantId;
+
+    @ManyToOne
+    @JoinColumn(name = "etudiant_id", insertable = false, updatable = false)
     private profils_etudiants etudiant;
+
+    @Column(name = "affectation_id")
     private Integer affectationId;
+
+    @ManyToOne
+    @JoinColumn(name = "affectation_id", insertable = false, updatable = false)
     private affectations_enseignement affectation;
+
+    @Column(name = "periode_id")
     private Integer periodeId;
+
+    @ManyToOne
+    @JoinColumn(name = "periode_id", insertable = false, updatable = false)
     private periodes periode;
+
+    @Column(name = "type_evaluation", length = 100)
     private String typeEvaluation;
+
+    @Column(name = "valeur", precision = 5, scale = 2, nullable = false)
     private BigDecimal valeur;
+
+    @Column(name = "sur", precision = 5, scale = 2)
     private BigDecimal sur;
+
+    @Column(name = "commentaire", columnDefinition = "TEXT")
     private String commentaire;
+
+    @Column(name = "saisi_par")
     private Integer saisiPar;
+
+    @ManyToOne
+    @JoinColumn(name = "saisi_par", insertable = false, updatable = false)
     private Users saisiParUser;
+
+    @Column(name = "date_saisie")
     private LocalDateTime dateSaisie;
+
+    @Column(name = "est_valide")
     private Boolean valide;
+
+    @Column(name = "ancienne_valeur", precision = 5, scale = 2)
     private BigDecimal ancienneValeur;
+
+    @Column(name = "corrige_par")
     private Integer corrigePar;
+
+    @ManyToOne
+    @JoinColumn(name = "corrige_par", insertable = false, updatable = false)
     private Users corrigeParUser;
+
+    @Column(name = "date_correction")
     private LocalDateTime dateCorrection;
+
+    @Column(name = "motif_correction", columnDefinition = "TEXT")
     private String motifCorrection;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     public notes() {

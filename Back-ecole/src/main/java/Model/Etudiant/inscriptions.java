@@ -2,21 +2,55 @@ package Model.Etudiant;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "inscriptions")
 public class inscriptions {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "etudiant_id")
     private Integer etudiantId;
+
+    @ManyToOne
+    @JoinColumn(name = "etudiant_id", insertable = false, updatable = false)
     private profils_etudiants etudiant;
+
+    @Column(name = "classe_id")
     private Integer classeId;
+
+    @ManyToOne
+    @JoinColumn(name = "classe_id", insertable = false, updatable = false)
     private classes classe;
+
+    @Column(name = "annee_scolaire_id")
     private Integer anneeScolaireId;
+
+    @ManyToOne
+    @JoinColumn(name = "annee_scolaire_id", insertable = false, updatable = false)
     private annees_scolaires anneeScolaire;
+
+    @Column(name = "type_inscription", length = 50)
     private String typeInscription;
+
+    @Column(name = "date_inscription")
     private LocalDate dateInscription;
+
+    @Column(name = "statut", length = 50)
     private String statut;
+
+    @Column(name = "rang_final")
     private Integer rangFinal;
+
+    @Column(name = "est_admis")
     private Boolean admis;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     public inscriptions() {

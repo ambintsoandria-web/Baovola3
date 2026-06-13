@@ -2,17 +2,41 @@ package Model.Etudiant;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "periodes")
 public class periodes {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "annee_scolaire_id")
     private Integer anneeScolaireId;
+
+    @ManyToOne
+    @JoinColumn(name = "annee_scolaire_id", insertable = false, updatable = false)
     private annees_scolaires anneeScolaire;
+
+    @Column(name = "libelle", length = 100, nullable = false)
     private String libelle;
+
+    @Column(name = "type", length = 20)
     private String type;
+
+    @Column(name = "ordre", nullable = false)
     private Integer ordre;
+
+    @Column(name = "date_debut")
     private LocalDate dateDebut;
+
+    @Column(name = "date_fin")
     private LocalDate dateFin;
+
+    @Column(name = "date_publication_notes")
     private LocalDate datePublicationNotes;
+
+    @Column(name = "est_cloturee")
     private Boolean cloturee;
 
     public periodes() {

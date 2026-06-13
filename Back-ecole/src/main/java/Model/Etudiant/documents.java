@@ -1,21 +1,56 @@
 package Model.Etudiant;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "documents")
 public class documents {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "etudiant_id")
     private Integer etudiantId;
+
+    @ManyToOne
+    @JoinColumn(name = "etudiant_id", insertable = false, updatable = false)
     private profils_etudiants etudiant;
+
+    @Column(name = "type_document", length = 100)
     private String typeDocument;
+
+    @Column(name = "titre", length = 255)
     private String titre;
+
+    @Column(name = "fichier_url", length = 500)
     private String fichierUrl;
+
+    @Column(name = "annee_scolaire_id")
     private Integer anneeScolaireId;
+
+    @ManyToOne
+    @JoinColumn(name = "annee_scolaire_id", insertable = false, updatable = false)
     private annees_scolaires anneeScolaire;
+
+    @Column(name = "periode_id")
     private Integer periodeId;
+
+    @ManyToOne
+    @JoinColumn(name = "periode_id", insertable = false, updatable = false)
     private periodes periode;
+
+    @Column(name = "genere_par")
     private Integer generePar;
+
+    @ManyToOne
+    @JoinColumn(name = "genere_par", insertable = false, updatable = false)
     private Users genereParUser;
+
+    @Column(name = "genere_le")
     private LocalDateTime genereLe;
+
+    @Column(name = "est_valide")
     private Boolean valide;
 
     public documents() {

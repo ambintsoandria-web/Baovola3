@@ -1,17 +1,41 @@
 package Model.Etudiant;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "profils_parents")
 public class profils_parents {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "user_id")
     private Integer userId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private Users user;
+
+    @Column(name = "nom", length = 150, nullable = false)
     private String nom;
+
+    @Column(name = "prenom", length = 150, nullable = false)
     private String prenom;
+
+    @Column(name = "telephone", length = 50)
     private String telephone;
+
+    @Column(name = "email", length = 255)
     private String email;
+
+    @Column(name = "profession", length = 200)
     private String profession;
+
+    @Column(name = "lien_parente", length = 100)
     private String lienParente;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     public profils_parents() {

@@ -1,14 +1,31 @@
 package Model.Etudiant;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "users")
 public class Users {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "email", length = 255, unique = true, nullable = false)
     private String email;
+
+    @Column(name = "password", length = 255, nullable = false)
     private String password;
+
+    @Column(name = "is_active")
     private Boolean active;
+
+    @Column(name = "last_login")
     private LocalDateTime lastLogin;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     public Users() {

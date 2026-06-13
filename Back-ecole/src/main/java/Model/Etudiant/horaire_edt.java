@@ -3,18 +3,45 @@ package Model.Etudiant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "horaire_edt")
 public class horaire_edt {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "affectation_id")
     private Integer affectationId;
+
+    @ManyToOne
+    @JoinColumn(name = "affectation_id", insertable = false, updatable = false)
     private affectations_enseignement affectation;
+
+    @Column(name = "salle_id")
     private Integer salleId;
+
+    @ManyToOne
+    @JoinColumn(name = "salle_id", insertable = false, updatable = false)
     private salles salle;
+
+    @Column(name = "jour_semaine", nullable = false)
     private Integer jourSemaine;
+
+    @Column(name = "heure_debut")
     private LocalTime heureDebut;
+
+    @Column(name = "heure_fin")
     private LocalTime heureFin;
+
+    @Column(name = "date_debut_validite")
     private LocalDate dateDebutValidite;
+
+    @Column(name = "date_fin_validite")
     private LocalDate dateFinValidite;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     public horaire_edt() {

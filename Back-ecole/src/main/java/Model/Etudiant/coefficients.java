@@ -1,13 +1,30 @@
 package Model.Etudiant;
 
 import java.math.BigDecimal;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "coefficients")
 public class coefficients {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "matiere_id")
     private Integer matiereId;
+
+    @ManyToOne
+    @JoinColumn(name = "matiere_id", insertable = false, updatable = false)
     private matieres matiere;
+
+    @Column(name = "niveau_id")
     private Integer niveauId;
+
+    @ManyToOne
+    @JoinColumn(name = "niveau_id", insertable = false, updatable = false)
     private niveaux niveau;
+
+    @Column(name = "valeur", precision = 4, scale = 2, nullable = false)
     private BigDecimal valeur;
 
     public coefficients() {

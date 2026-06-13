@@ -1,12 +1,25 @@
 package Model.Etudiant;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "matieres")
 public class matieres {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "etablissement_id")
     private Integer etablissementId;
+
+    @Column(name = "nom", length = 150, nullable = false)
     private String nom;
+
+    @Column(name = "code", length = 20)
     private String code;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     public matieres() {

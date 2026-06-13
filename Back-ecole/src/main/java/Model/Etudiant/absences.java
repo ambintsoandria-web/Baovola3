@@ -1,22 +1,59 @@
 package Model.Etudiant;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "absences")
 public class absences {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "seance_id")
     private Integer seanceId;
+
+    @ManyToOne
+    @JoinColumn(name = "seance_id", insertable = false, updatable = false)
     private seances seance;
+
+    @Column(name = "etudiant_id")
     private Integer etudiantId;
+
+    @ManyToOne
+    @JoinColumn(name = "etudiant_id", insertable = false, updatable = false)
     private profils_etudiants etudiant;
+
+    @Column(name = "type", length = 50)
     private String type;
+
+    @Column(name = "motif", columnDefinition = "TEXT")
     private String motif;
+
+    @Column(name = "justificatif_url", length = 500)
     private String justificatifUrl;
+
+    @Column(name = "saisi_par")
     private Integer saisiPar;
+
+    @ManyToOne
+    @JoinColumn(name = "saisi_par", insertable = false, updatable = false)
     private Users saisiParUser;
+
+    @Column(name = "valide_par")
     private Integer validePar;
+
+    @ManyToOne
+    @JoinColumn(name = "valide_par", insertable = false, updatable = false)
     private Users valideParUser;
+
+    @Column(name = "date_validation")
     private LocalDateTime dateValidation;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     public absences() {

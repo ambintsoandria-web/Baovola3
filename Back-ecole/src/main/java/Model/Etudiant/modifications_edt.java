@@ -3,23 +3,62 @@ package Model.Etudiant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "modifications_edt")
 public class modifications_edt {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "emploi_du_temps_id")
     private Integer emploiDuTempsId;
+
+    @ManyToOne
+    @JoinColumn(name = "emploi_du_temps_id", insertable = false, updatable = false)
     private horaire_edt emploiDuTemps;
+
+    @Column(name = "date_concernee", nullable = false)
     private LocalDate dateConcernee;
+
+    @Column(name = "portee", length = 20)
     private String portee;
+
+    @Column(name = "type_modification", length = 50, nullable = false)
     private String typeModification;
+
+    @Column(name = "motif", length = 500)
     private String motif;
+
+    @Column(name = "nouvelle_salle_id")
     private Integer nouvelleSalleId;
+
+    @ManyToOne
+    @JoinColumn(name = "nouvelle_salle_id", insertable = false, updatable = false)
     private salles nouvelleSalle;
+
+    @Column(name = "nouvelle_heure_debut")
     private LocalTime nouvelleHeureDebut;
+
+    @Column(name = "nouvelle_heure_fin")
     private LocalTime nouvelleHeureFin;
+
+    @Column(name = "remplacant_id")
     private Integer remplacantId;
+
+    @ManyToOne
+    @JoinColumn(name = "remplacant_id", insertable = false, updatable = false)
     private profils_professeurs remplacant;
+
+    @Column(name = "cree_par")
     private Integer creePar;
+
+    @ManyToOne
+    @JoinColumn(name = "cree_par", insertable = false, updatable = false)
     private Users creeParUser;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     public modifications_edt() {

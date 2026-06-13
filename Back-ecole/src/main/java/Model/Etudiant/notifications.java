@@ -1,19 +1,47 @@
 package Model.Etudiant;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "notifications")
 public class notifications {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "user_id")
     private Integer userId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private Users user;
+
+    @Column(name = "type_id")
     private Integer typeId;
+
+    @Column(name = "titre", length = 255)
     private String titre;
+
+    @Column(name = "message", columnDefinition = "TEXT")
     private String message;
+
+    @Column(name = "lien_action", length = 500)
     private String lienAction;
+
+    @Column(name = "lu")
     private Boolean lu;
+
+    @Column(name = "date_lecture")
     private LocalDateTime dateLecture;
+
+    @Column(name = "entite_type", length = 100)
     private String entiteType;
+
+    @Column(name = "entite_id")
     private Integer entiteId;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     public notifications() {

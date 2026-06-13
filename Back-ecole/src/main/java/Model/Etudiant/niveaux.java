@@ -1,12 +1,25 @@
 package Model.Etudiant;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "niveaux")
 public class niveaux {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "etablissement_id")
     private Integer etablissementId;
+
+    @Column(name = "libelle", length = 100, nullable = false)
     private String libelle;
+
+    @Column(name = "ordre", nullable = false)
     private Integer ordre;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     public niveaux() {
