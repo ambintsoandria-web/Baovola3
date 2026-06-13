@@ -16,7 +16,7 @@ public class annees_scolaires {
     }
 
     public annees_scolaires(Integer id, Integer etablissementId, String libelle, LocalDate dateDebut, LocalDate dateFin,
-                            Boolean active, LocalDateTime createdAt) {
+            Boolean active, LocalDateTime createdAt) {
         this.id = id;
         this.etablissementId = etablissementId;
         this.libelle = libelle;
