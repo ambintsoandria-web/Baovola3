@@ -42,7 +42,7 @@
    mvn spring-boot:run
    ```
 
-   L'application sera accessible sur `http://localhost:1234`
+   L'application sera accessible sur `http://localhost:8080`
 
 ## Lancer le Frontend
 
@@ -53,15 +53,15 @@
 
 2. **Lancer le serveur HTTP de développement :**
    ```bash
-   python -m http.server 8888
+   python -m http.server 8080
    ```
 
-   Le frontend sera accessible sur `http://localhost:8888/pages/layouts/model.html`
+   Le frontend sera accessible sur `http://localhost:8080/pages/layouts/model.html`
 
 ## Accéder à l'Application
 
-- **Frontend** : http://localhost:8888/pages/layouts/model.html
-- **Backend API** : http://localhost:1234 (Spring Boot)  
+- **Frontend** : http://localhost:8080/pages/layouts/model.html
+- **Backend API** : http://localhost:8080 (Spring Boot)
 
 ## Structure des Contrôleurs
 
@@ -103,7 +103,7 @@ Les contrôleurs Spring MVC sont configurés pour la navigation :
 ### Port déjà utilisé
 - Si le port 8080 est occupé, utiliser un autre port :
   ```bash
-  python -m http.server 8888
+  python -m http.server 8081
   ```
 
 ### Problèmes de dépendances Maven
