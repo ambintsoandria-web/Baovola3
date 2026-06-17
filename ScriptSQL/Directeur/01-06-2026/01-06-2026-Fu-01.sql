@@ -9,7 +9,6 @@ BEGIN;
 -- 1. Suppression dynamique de la contrainte unique globale sur (heure_debut, heure_fin) de la table horaire_edt
 DO $$
 DECLARE
-
     constraint_name text;
 BEGIN
     SELECT tc.constraint_name 
@@ -62,5 +61,3 @@ WHERE niveau_id IS NOT NULL;
 CREATE INDEX IF NOT EXISTS idx_horaire_edt_niveau_id ON horaire_edt(niveau_id);
 
 COMMIT;
-
--- sode mba afaka amboarina kely le script base amle ordre anle izy fa misy erreur kely le 01-06-2026 sy le 26-05-2026

@@ -1,89 +1,14 @@
 <!DOCTYPE html>
-<html lang="fr">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LycéePro — Mon Emploi du Temps</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" th:href="@{/css/style.css}">
-  <script th:src="@{/js/script.js}" defer></script>
-</head>
-
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
 <body>
-  <canvas id="particle-canvas"></canvas>
-  <div class="app-shell">
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-brand">
-        <div class="sidebar-brand-icon">🎓</div>
-        <div class="sidebar-brand-text">
-          <h1>LycéePro</h1>
-          <span>Gestion Scolaire</span>
-        </div>
-      </div>
-      <div class="role-switcher">
-        <label>Vue actuelle</label>
-        <select id="roleSelect" onchange="switchRole(this.value)">
-          <option value="directeur">👔 Directeur</option>
-          <option value="secretariat">📋 Secrétariat</option>
-          <option value="professeur">📚 Professeur</option>
-          <option value="etudiant" selected>🎒 Étudiant</option>
-        </select>
-      </div>
-      <nav class="nav-section" id="nav-etudiant">
-        <p class="nav-section-title">Mon Espace</p>
-        <div class="nav-item" onclick="showPage('etu-notes')"><i class="fas fa-star"></i> Mes Notes</div>
-        <div class="nav-item active" onclick="showPage('etu-emploi')"><i class="fas fa-calendar-week"></i> Emploi du
-          temps</div>
-        <div class="nav-item" onclick="showPage('etu-bulletin')"><i class="fas fa-file-alt"></i> Mon Bulletin</div>
-        <div class="nav-item" onclick="showPage('etu-devoirs')"><i class="fas fa-book-open"></i> Devoirs & Leçons</div>
-        <p class="nav-section-title">Général</p>
-        <div class="nav-item" onclick="showPage('actualites')"><i class="fas fa-newspaper"></i> Actualités <span
-            class="nav-badge">2</span></div>
-      </nav>
-      <div class="sidebar-footer">
-        <div class="sidebar-user">
-          <div class="sidebar-avatar" id="sidebar-avatar-initials">RJ</div>
-          <div class="sidebar-user-info">
-            <strong id="sidebar-user-name">Rakoto Jean</strong>
-            <small id="sidebar-user-role">Étudiant — Terminale C</small>
-          </div>
-          <i class="fas fa-sign-out-alt" style="color:rgba(255,255,255,.3);font-size:14px;"></i>
-        </div>
-      </div>
-    </aside>
-    <header class="topbar">
-      <div class="topbar-title" id="topbar-title">Mon Emploi du Temps</div>
-      <div class="topbar-search">
-        <i class="fas fa-search"></i>
-        <input type="text" placeholder="Rechercher…" />
-      </div>
-      <div class="topbar-actions">
-        <button class="theme-toggle" id="themeToggle" title="Changer de thème"><i class="fas fa-moon"></i></button>
-        <button class="topbar-btn" style="position:relative;" onclick="toggleNotif()">
-          <i class="fas fa-bell"></i>
-          <span class="notif-dot"></span>
-        </button>
-        <button class="topbar-btn"><i class="fas fa-cog"></i></button>
-        <div class="topbar-user">
-          <div class="topbar-avatar" id="topbar-avatar-initials">RJ</div>
-          <div class="topbar-user-meta">
-            <strong id="topbar-user-name">Rakoto Jean</strong>
-            <small id="topbar-user-role">Étudiant</small>
-          </div>
-        </div>
-      </div>
-    </header>
-    <main class="main-content">
-
-      <div class="page-header">
-        <div>
-          <h2>Mon Emploi du Temps</h2>
-          <p>Semaine du 14 au 18 Avril 2026 — Terminale C</p>
-        </div>
+<canvas id="particle-canvas"></canvas>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar" th:replace="fragments/header :: sidebar"></aside>
+  <header class="topbar" th:replace="fragments/header :: topbar"></header>
+  <main class="main-content">
+    <div class="page-header">
+        <div><h2>Mon Emploi du Temps</h2><p>Semaine du 14 au 18 Avril 2026 — Terminale C</p></div>
       </div>
       <div class="card">
         <div class="card-body" style="padding:var(--sp-md);">
@@ -96,73 +21,37 @@
             <div class="schedule-header">Vendredi</div>
 
             <div class="schedule-cell schedule-time">07h–08h</div>
-            <div class="schedule-cell">
-              <div class="schedule-class math"><span>Mathématiques</span><small>Prof. Rabe</small></div>
-            </div>
-            <div class="schedule-cell">
-              <div class="schedule-class french"><span>Français</span><small>Prof. Rasoa</small></div>
-            </div>
-            <div class="schedule-cell">
-              <div class="schedule-class math"><span>Mathématiques</span><small>Prof. Rabe</small></div>
-            </div>
-            <div class="schedule-cell">
-              <div class="schedule-class history"><span>Histoire-Géo</span><small>Prof. Hery</small></div>
-            </div>
-            <div class="schedule-cell">
-              <div class="schedule-class math"><span>Mathématiques</span><small>Prof. Rabe</small></div>
-            </div>
+            <div class="schedule-cell"><div class="schedule-class math"><span>Mathématiques</span><small>Prof. Rabe</small></div></div>
+            <div class="schedule-cell"><div class="schedule-class french"><span>Français</span><small>Prof. Rasoa</small></div></div>
+            <div class="schedule-cell"><div class="schedule-class math"><span>Mathématiques</span><small>Prof. Rabe</small></div></div>
+            <div class="schedule-cell"><div class="schedule-class history"><span>Histoire-Géo</span><small>Prof. Hery</small></div></div>
+            <div class="schedule-cell"><div class="schedule-class math"><span>Mathématiques</span><small>Prof. Rabe</small></div></div>
 
             <div class="schedule-cell schedule-time">08h–09h</div>
-            <div class="schedule-cell">
-              <div class="schedule-class science"><span>Sc. Physiques</span><small>Prof. Andry</small></div>
-            </div>
-            <div class="schedule-cell">
-              <div class="schedule-class math"><span>Mathématiques</span><small>Prof. Rabe</small></div>
-            </div>
-            <div class="schedule-cell">
-              <div class="schedule-class french"><span>Français</span><small>Prof. Rasoa</small></div>
-            </div>
-            <div class="schedule-cell">
-              <div class="schedule-class math"><span>Mathématiques</span><small>Prof. Rabe</small></div>
-            </div>
-            <div class="schedule-cell">
-              <div class="schedule-class science"><span>SVT</span><small>Prof. Mamy</small></div>
-            </div>
+            <div class="schedule-cell"><div class="schedule-class science"><span>Sc. Physiques</span><small>Prof. Andry</small></div></div>
+            <div class="schedule-cell"><div class="schedule-class math"><span>Mathématiques</span><small>Prof. Rabe</small></div></div>
+            <div class="schedule-cell"><div class="schedule-class french"><span>Français</span><small>Prof. Rasoa</small></div></div>
+            <div class="schedule-cell"><div class="schedule-class math"><span>Mathématiques</span><small>Prof. Rabe</small></div></div>
+            <div class="schedule-cell"><div class="schedule-class science"><span>SVT</span><small>Prof. Mamy</small></div></div>
 
             <div class="schedule-cell schedule-time">09h–10h</div>
             <div class="schedule-cell"></div>
-            <div class="schedule-cell">
-              <div class="schedule-class history"><span>Histoire-Géo</span><small>Prof. Hery</small></div>
-            </div>
-            <div class="schedule-cell">
-              <div class="schedule-class science"><span>Sc. Physiques</span><small>Prof. Andry</small></div>
-            </div>
-            <div class="schedule-cell">
-              <div class="schedule-class french"><span>Français</span><small>Prof. Rasoa</small></div>
-            </div>
+            <div class="schedule-cell"><div class="schedule-class history"><span>Histoire-Géo</span><small>Prof. Hery</small></div></div>
+            <div class="schedule-cell"><div class="schedule-class science"><span>Sc. Physiques</span><small>Prof. Andry</small></div></div>
+            <div class="schedule-cell"><div class="schedule-class french"><span>Français</span><small>Prof. Rasoa</small></div></div>
             <div class="schedule-cell"></div>
 
             <div class="schedule-cell schedule-time">14h–15h</div>
-            <div class="schedule-cell">
-              <div class="schedule-class french"><span>Anglais</span><small>Prof. Jean</small></div>
-            </div>
-            <div class="schedule-cell">
-              <div class="schedule-class science"><span>SVT</span><small>Prof. Mamy</small></div>
-            </div>
+            <div class="schedule-cell"><div class="schedule-class french"><span>Anglais</span><small>Prof. Jean</small></div></div>
+            <div class="schedule-cell"><div class="schedule-class science"><span>SVT</span><small>Prof. Mamy</small></div></div>
             <div class="schedule-cell"></div>
-            <div class="schedule-cell">
-              <div class="schedule-class science"><span>Anglais</span><small>Prof. Jean</small></div>
-            </div>
-            <div class="schedule-cell">
-              <div class="schedule-class math"><span>Interrogation</span><small>Prof. Rabe</small></div>
-            </div>
+            <div class="schedule-cell"><div class="schedule-class science"><span>Anglais</span><small>Prof. Jean</small></div></div>
+            <div class="schedule-cell"><div class="schedule-class math"><span>Interrogation</span><small>Prof. Rabe</small></div></div>
           </div>
         </div>
       </div>
-
-    </main>
-  </div>
-
+  </main>
+</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
-
 </html>
