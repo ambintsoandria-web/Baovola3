@@ -66,24 +66,19 @@
     const r = roles[roleKey];
     if (!r) return;
 
-    // Update user info
-    document.getElementById('sidebar-user-name').textContent = r.name;
-    document.getElementById('sidebar-user-role').textContent = r.role;
-    document.getElementById('sidebar-avatar-initials').textContent = r.initials;
-    document.getElementById('topbar-user-name').textContent = r.name;
-    document.getElementById('topbar-user-role').textContent = r.role;
-    document.getElementById('topbar-avatar-initials').textContent = r.initials;
+    const currentPath = window.location.pathname;
+    const expectedPath = '/' + roleKey + '/' + r.defaultPage;
+    const isSameRole = document.getElementById(r.nav).style.display !== 'none';
 
-    // Show/hide navs
-    ['nav-directeur','nav-secretariat','nav-professeur','nav-etudiant'].forEach(id => {
-      document.getElementById(id).style.display = 'none';
-    });
+    if (isSameRole && currentPath === expectedPath) {
+      showToast('🔄 Rôle déjà sélectionné : ' + r.role);
+      return;
+    }
+
     document.getElementById(r.nav).style.display = 'block';
-
-    // Navigate to default page for the role
-    window.location.href = '/' + roleKey + '/' + r.defaultPage;
-
-    showToast('🔄 Vue changée : ' + r.role);
+    document.getElementById('roleSelect').value = roleKey;
+    window.location.href = expectedPath;
+    showToast('🔄 Vue activée : ' + r.role);
   }
 
   /* ============================================================
@@ -274,28 +269,43 @@
 
   /* Init */
   window.addEventListener('DOMContentLoaded', () => {
-    // Set active nav item based on current URL
     const currentPath = window.location.pathname;
+
+    // Initialize nav visibility based on URL
+    const allNavs = ['nav-directeur','nav-secretariat','nav-professeur','nav-etudiant'];
+    let detectedRole = 'directeur';
+    if (currentPath.includes('/secretariat')) detectedRole = 'secretariat';
+    else if (currentPath.includes('/professeur')) detectedRole = 'professeur';
+    else if (currentPath.includes('/etudiant')) detectedRole = 'etudiant';
+
+    allNavs.forEach(id => {
+      document.getElementById(id).style.display = (id === 'nav-' + detectedRole) ? 'block' : 'none';
+    });
+
+    // Update user info
+    const r = roles[detectedRole];
+    if (r) {
+      document.getElementById('sidebar-user-name').textContent = r.name;
+      document.getElementById('sidebar-user-role').textContent = r.role;
+      document.getElementById('sidebar-avatar-initials').textContent = r.initials;
+      document.getElementById('topbar-user-name').textContent = r.name;
+      document.getElementById('topbar-user-role').textContent = r.role;
+      document.getElementById('topbar-avatar-initials').textContent = r.initials;
+    }
+
+    // Set active nav item
     document.querySelectorAll('.nav-item').forEach(item => {
       const href = item.getAttribute('href');
       if (href && currentPath.includes(href)) {
         item.classList.add('active');
       }
     });
-    
-    // Set role selector based on current path (without redirecting)
+
+    // Set role selector
     const roleSelect = document.getElementById('roleSelect');
     if (roleSelect) {
-      if (currentPath.includes('/directeur')) {
-        roleSelect.value = 'directeur';
-      } else if (currentPath.includes('/secretariat')) {
-        roleSelect.value = 'secretariat';
-      } else if (currentPath.includes('/professeur')) {
-        roleSelect.value = 'professeur';
-      } else if (currentPath.includes('/etudiant')) {
-        roleSelect.value = 'etudiant';
-      }
+      roleSelect.value = detectedRole;
     }
-    
+
     setTimeout(() => showToast('👋 Bienvenue sur LycéePro !'), 800);
   });
