@@ -22,39 +22,65 @@ public class EtudiantController {
 
     @GetMapping("/etudiant/emploi")
     public String emploi(Model model, HttpSession session) {
-        User userLoggedIn = (User) session.getAttribute("userLoggedIn");
-        ProfilEtudiant profilEtudiant = (ProfilEtudiant) session.getAttribute("profilEtudiant");
-        if (userLoggedIn == null && profilEtudiant == null) {
-            userLoggedIn = userRepository.findByEmailAndPassword("rakoto.jean@lycee.mg", "a");
-            profilEtudiant = userRepository.findProfilEtudiantByUserId(userLoggedIn.getId());
-            session.setAttribute("userLoggedIn", userLoggedIn);
-        }
+        User userLoggedIn = userRepository.findByEmailAndPassword("rakoto.jean@lycee.mg", "a");
+        ProfilEtudiant profilEtudiant = userRepository.findProfilEtudiantByUserId(userLoggedIn.getId());
+
+        session.setAttribute("userLoggedIn", userLoggedIn);
+        session.setAttribute("profilEtudiant", profilEtudiant);
 
         model.addAttribute("pageTitle", "Mon Emploi du Temps");
         model.addAttribute("currentRole", "etudiant");
         model.addAttribute("user", userLoggedIn);
+        model.addAttribute("profilEtudiant", profilEtudiant);
 
         return "Etudiant/calendar";
     }
 
     @GetMapping("/etudiant/notes")
-    public String notes(Model model) {
+    public String notes(Model model, HttpSession session) {
+        User userLoggedIn = userRepository.findByEmailAndPassword("rakoto.jean@lycee.mg", "a");
+        ProfilEtudiant profilEtudiant = userRepository.findProfilEtudiantByUserId(userLoggedIn.getId());
+
+        session.setAttribute("userLoggedIn", userLoggedIn);
+        session.setAttribute("profilEtudiant", profilEtudiant);
+
         model.addAttribute("pageTitle", "Mes Notes");
         model.addAttribute("currentRole", "etudiant");
+        model.addAttribute("user", userLoggedIn);
+        model.addAttribute("profilEtudiant", profilEtudiant);
+
         return "Etudiant/notes";
     }
 
     @GetMapping("/etudiant/devoirs")
-    public String devoirs(Model model) {
+    public String devoirs(Model model, HttpSession session) {
+        User userLoggedIn = userRepository.findByEmailAndPassword("rakoto.jean@lycee.mg", "a");
+        ProfilEtudiant profilEtudiant = userRepository.findProfilEtudiantByUserId(userLoggedIn.getId());
+
+        session.setAttribute("userLoggedIn", userLoggedIn);
+        session.setAttribute("profilEtudiant", profilEtudiant);
+
         model.addAttribute("pageTitle", "Devoirs & Leçons");
         model.addAttribute("currentRole", "etudiant");
+        model.addAttribute("user", userLoggedIn);
+        model.addAttribute("profilEtudiant", profilEtudiant);
+
         return "Etudiant/devoirs";
     }
 
     @GetMapping("/etudiant/bulletin")
-    public String bulletin(Model model) {
+    public String bulletin(Model model, HttpSession session) {
+        User userLoggedIn = userRepository.findByEmailAndPassword("rakoto.jean@lycee.mg", "a");
+        ProfilEtudiant profilEtudiant = userRepository.findProfilEtudiantByUserId(userLoggedIn.getId());
+
+        session.setAttribute("userLoggedIn", userLoggedIn);
+        session.setAttribute("profilEtudiant", profilEtudiant);
+
         model.addAttribute("pageTitle", "Mon Bulletin");
         model.addAttribute("currentRole", "etudiant");
+        model.addAttribute("user", userLoggedIn);
+        model.addAttribute("profilEtudiant", profilEtudiant);
+
         return "Etudiant/bulletin";
     }
 }
