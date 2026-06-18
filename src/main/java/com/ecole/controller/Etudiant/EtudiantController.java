@@ -7,10 +7,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.ecole.entity.Etudiant.Devoir;
+import com.ecole.entity.Etudiant.Inscription;
+import com.ecole.entity.Etudiant.Lecon;
 import com.ecole.entity.Etudiant.ProfilEtudiant;
 import com.ecole.entity.Etudiant.User;
+import com.ecole.repository.Etudiant.DevoirRepository;
+import com.ecole.repository.Etudiant.InscriptionRepository;
+import com.ecole.repository.Etudiant.LeconRepository;
 import com.ecole.repository.Etudiant.UserRepository;
 import com.ecole.service.Etudiant.UserService;
+
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -22,11 +29,20 @@ public class EtudiantController {
     @Autowired
     public UserService userService;
 
+    @Autowired
+    public DevoirRepository devoirRepository;
+
+    @Autowired
+    public InscriptionRepository inscriptionRepository;
+
+    @Autowired
+    public LeconRepository leconRepository;
+
     @GetMapping("/etudiant/emploi")
     public String emploi(Model model, HttpSession session) {
+
         User userLoggedIn = userService.getCurrentUser(session);
         ProfilEtudiant profilEtudiant = userService.getCurrentProfil(session);
-        // List<EmploiDuTemps> emploiDuTemps = emploiDuTempsRepository.findBySalleId(userRepository);
 
         if (userLoggedIn == null) {
             return "redirect:/login";
@@ -66,11 +82,25 @@ public class EtudiantController {
             return "redirect:/login";
         }
 
+        List<Inscription> inscriptions = inscriptionRepository.findActiveByEtudiant(profilEtudiant.getUserId());
+
+        Long classeId = null;
+        if (!inscriptions.isEmpty()) {
+            classeId = inscriptions.get(0).getClasseId();
+        }
+
+        List<Devoir> devoirs = (classeId != null)
+                ? devoirRepository.findByClasse(classeId)
+                : List.of();
+
+        List<Lecon> lecons = leconRepository.findAll();
+
         model.addAttribute("pageTitle", "Devoirs & Leçons");
         model.addAttribute("currentRole", "etudiant");
         model.addAttribute("user", userLoggedIn);
         model.addAttribute("profilEtudiant", profilEtudiant);
-
+        model.addAttribute("devoirs", devoirs);
+        model.addAttribute("lecons", lecons);
         return "Etudiant/devoirs";
     }
 

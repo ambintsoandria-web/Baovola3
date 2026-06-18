@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LycéePro — Connexion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <canvas id="particle-canvas"></canvas>
+
+    <main class="login-page">
+        <section class="login-hero" aria-hidden="true">
+            <div class="login-orb login-orb-1"></div>
+            <div class="login-orb login-orb-2"></div>
+
+            <div class="login-brand">
+                <div class="login-brand-icon">🎓</div>
+                <div>
+                    <h1>LycéePro</h1>
+                    <p>Système de gestion scolaire</p>
+                </div>
+            </div>
+
+            <div class="login-copy">
+                <span class="login-pill">Espace sécurisé</span>
+                <h2>Accédez à votre tableau de bord</h2>
+                <p>Connexion unifiée pour la direction, le secrétariat, les professeurs et les étudiants.</p>
+            </div>
+
+            <div class="login-meta">
+                <div>
+                    <strong>Directeur</strong>
+                    <span>Finances, professeurs, validations</span>
+                </div>
+                <div>
+                    <strong>Secrétariat</strong>
+                    <span>Élèves, paiements, dossiers</span>
+                </div>
+                <div>
+                    <strong>Professeur</strong>
+                    <span>Notes, devoirs, emplois du temps</span>
+                </div>
+                <div>
+                    <strong>Étudiant</strong>
+                    <span>Notes, bulletin, planning</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="login-card" aria-labelledby="login-title">
+            <div class="login-card-head">
+                <span class="login-badge">Connexion</span>
+                <a th:href="@{/}" class="login-home" title="Accueil"><i class="fas fa-home"></i></a>
+            </div>
+
+            <div class="login-card-body">
+                <h2 id="login-title">Bon retour parmi nous</h2>
+                <p>Saisissez votre adresse email et votre mot de passe pour continuer.</p>
+
+                <div th:if="${param.error != null}" class="login-alert">
+                    <i class="fas fa-circle-exclamation"></i>
+                    <span th:text="${param.error[0] == 'role' ? 'Ce compte existe mais aucun rôle n’est associé.' : 'Email ou mot de passe incorrect.'}"></span>
+                </div>
+
+                <form th:action="@{/login}" method="post">
+                    <div class="form-group">
+                        <label for="email">Adresse email</label>
+                        <div class="login-input">
+                            <i class="fas fa-envelope"></i>
+                            <input id="email" class="form-control" name="email" type="email" placeholder="exemple@lycee.mg" autocomplete="email" autofocus required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Mot de passe</label>
+                        <div class="login-input">
+                            <i class="fas fa-lock"></i>
+                            <input id="password" class="form-control" name="password" type="password" placeholder="Votre mot de passe" autocomplete="current-password" required>
+                        </div>
+                    </div>
+
+                    <div class="login-options">
+                        <label class="remember">
+                            <input type="checkbox">
+                            <span>Se souvenir de moi</span>
+                        </label>
+                        <a href="#">Mot de passe oublié ?</a>
+                    </div>
+
+                    <button class="btn btn-primary login-submit" type="submit">
+                        Se connecter <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script th:src="@{/js/script.js}" defer></script>
+</body>
+</html>

@@ -8,7 +8,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String index() {
-        return "redirect:/directeur/dashboard";  // Rediriger vers le dashboard directeur par défaut
+        return "redirect:/login";
     }
 
     @GetMapping("/error")

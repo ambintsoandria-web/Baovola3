@@ -19,11 +19,13 @@ public class UserService {
         User user = (User) session.getAttribute("userLoggedIn");
 
         if (user == null) {
-            user = userRepository.findByEmailAndPassword("rakoto.jean@lycee.mg", "a");
-            if (user != null) {
-                session.setAttribute("userLoggedIn", user);
+            return null;
+        }
 
-                ProfilEtudiant profil = userRepository.findProfilEtudiantByUserId(user.getId());
+        ProfilEtudiant profil = (ProfilEtudiant) session.getAttribute("profilEtudiant");
+        if (profil == null) {
+            profil = userRepository.findProfilEtudiantByUserId(user.getId());
+            if (profil != null) {
                 session.setAttribute("profilEtudiant", profil);
             }
         }
@@ -38,7 +40,9 @@ public class UserService {
             User user = getCurrentUser(session);
             if (user != null) {
                 profil = userRepository.findProfilEtudiantByUserId(user.getId());
-                session.setAttribute("profilEtudiant", profil);
+                if (profil != null) {
+                    session.setAttribute("profilEtudiant", profil);
+                }
             }
         }
 

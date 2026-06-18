@@ -15,7 +15,7 @@ public class UserRole {
     @Column(name = "role_id")
     private Long roleId;
 
-    // Getters et Setters
+
     //
     public Long getId() {
         return id;

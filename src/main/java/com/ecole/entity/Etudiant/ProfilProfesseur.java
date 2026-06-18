@@ -60,12 +60,6 @@ public class ProfilProfesseur {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
     
-    @Column(name = "id_contrat")
-    private Long idContrat;
-    
-    @Column(name = "id_matiere")
-    private Long idMatiere;
-    
     // Getters et Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -101,8 +95,4 @@ public class ProfilProfesseur {
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
-    public Long getIdContrat() { return idContrat; }
-    public void setIdContrat(Long idContrat) { this.idContrat = idContrat; }
-    public Long getIdMatiere() { return idMatiere; }
-    public void setIdMatiere(Long idMatiere) { this.idMatiere = idMatiere; }
 }

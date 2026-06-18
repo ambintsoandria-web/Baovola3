@@ -3,6 +3,7 @@ D:\Animation\Baovola3\src\main\java\com\ecole\controller\DirecteurController.jav
 D:\Animation\Baovola3\src\main\java\com\ecole\controller\Etudiant\EtudiantController.java
 D:\Animation\Baovola3\src\main\java\com\ecole\controller\FragmentController.java
 D:\Animation\Baovola3\src\main\java\com\ecole\controller\HomeController.java
+D:\Animation\Baovola3\src\main\java\com\ecole\controller\LoginController.java
 D:\Animation\Baovola3\src\main\java\com\ecole\controller\ProfesseurController.java
 D:\Animation\Baovola3\src\main\java\com\ecole\controller\SecretaireController.java
 D:\Animation\Baovola3\src\main\java\com\ecole\EcoleApplication.java
@@ -29,6 +30,9 @@ D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\Salle.java
 D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\Seance.java
 D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\User.java
 D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\UserRole.java
+D:\Animation\Baovola3\src\main\java\com\ecole\repository\Etudiant\DevoirRepository.java
 D:\Animation\Baovola3\src\main\java\com\ecole\repository\Etudiant\EmploiDuTempsRepository.java
+D:\Animation\Baovola3\src\main\java\com\ecole\repository\Etudiant\InscriptionRepository.java
+D:\Animation\Baovola3\src\main\java\com\ecole\repository\Etudiant\LeconRepository.java
 D:\Animation\Baovola3\src\main\java\com\ecole\repository\Etudiant\UserRepository.java
 D:\Animation\Baovola3\src\main\java\com\ecole\service\Etudiant\UserService.java

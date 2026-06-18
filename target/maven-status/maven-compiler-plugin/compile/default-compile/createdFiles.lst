@@ -10,12 +10,17 @@ com\ecole\repository\Etudiant\UserRepository.class
 com\ecole\controller\DirecteurController.class
 com\ecole\entity\Etudiant\Salle.class
 com\ecole\entity\Etudiant\Seance.class
+com\ecole\repository\Etudiant\DevoirRepository.class
 com\ecole\entity\Etudiant\Classe.class
+com\ecole\entity\Etudiant\Devoir.class
+com\ecole\repository\Etudiant\InscriptionRepository.class
 com\ecole\entity\Etudiant\AffectationEnseignement.class
+com\ecole\repository\Etudiant\LeconRepository.class
 com\ecole\entity\Etudiant\UserRole.class
 com\ecole\EcoleApplication.class
 com\ecole\entity\Etudiant\HoraireEdt.class
 com\ecole\entity\Etudiant\ProfilProfesseur.class
+com\ecole\entity\Etudiant\Lecon.class
 com\ecole\entity\Etudiant\Etablissement.class
 com\ecole\entity\Etudiant\ProfilEtudiant.class
 com\ecole\entity\Etudiant\Niveau.class
@@ -25,6 +30,7 @@ com\ecole\entity\Etudiant\EmploiDuTemps.class
 com\ecole\entity\Etudiant\Absence.class
 com\ecole\entity\Etudiant\Periode.class
 com\ecole\entity\Etudiant\Inscription.class
+com\ecole\controller\LoginController.class
 com\ecole\repository\Etudiant\EmploiDuTempsRepository.class
 com\ecole\entity\Etudiant\User.class
 com\ecole\controller\CommunsController.class
