@@ -224,4 +224,7 @@ SELECT classe_id FROM inscriptions  WHERE etudiant_id = 1 AND annee_scolaire_id 
 SELECT salle_id FROM inscriptions JOIN classes ON inscriptions.classe_id = classes.id WHERE inscriptions.etudiant_id = 1 AND inscriptions.annee_scolaire_id = 1;
 
 
-SELECT * FROM emploi_du_temps WHERE salle_id = 1;
+SELECT * FROM emploi_du_temps WHERE salle_id = 1 ;
+
+
+ALTER TABLE emploi_du_temps ADD COLUMN periode_id INT;

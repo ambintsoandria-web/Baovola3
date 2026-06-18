@@ -1,5 +1,7 @@
 package com.ecole.controller.Etudiant;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,45 +22,12 @@ public class EtudiantController {
     @Autowired
     public UserService userService;
 
-    // Méthode pour récupérer l'utilisateur depuis la session ou le charger
-    private User getCurrentUser(HttpSession session) {
-        User user = (User) session.getAttribute("userLoggedIn");
-        
-        if (user == null) {
-            // Charger depuis la base une seule fois
-            user = userRepository.findByEmailAndPassword("rakoto.jean@lycee.mg", "a");
-            if (user != null) {
-                session.setAttribute("userLoggedIn", user);
-                
-                // Charger aussi le profil
-                ProfilEtudiant profil = userRepository.findProfilEtudiantByUserId(user.getId());
-                session.setAttribute("profilEtudiant", profil);
-            }
-        }
-        
-        return user;
-    }
-
-    // Méthode pour récupérer le profil
-    private ProfilEtudiant getCurrentProfil(HttpSession session) {
-        ProfilEtudiant profil = (ProfilEtudiant) session.getAttribute("profilEtudiant");
-        
-        if (profil == null) {
-            User user = getCurrentUser(session);
-            if (user != null) {
-                profil = userRepository.findProfilEtudiantByUserId(user.getId());
-                session.setAttribute("profilEtudiant", profil);
-            }
-        }
-        
-        return profil;
-    }
-
     @GetMapping("/etudiant/emploi")
     public String emploi(Model model, HttpSession session) {
-        User userLoggedIn = getCurrentUser(session);
-        ProfilEtudiant profilEtudiant = getCurrentProfil(session);
-        
+        User userLoggedIn = userService.getCurrentUser(session);
+        ProfilEtudiant profilEtudiant = userService.getCurrentProfil(session);
+        // List<EmploiDuTemps> emploiDuTemps = emploiDuTempsRepository.findBySalleId(userRepository);
+
         if (userLoggedIn == null) {
             return "redirect:/login";
         }
@@ -73,9 +42,9 @@ public class EtudiantController {
 
     @GetMapping("/etudiant/notes")
     public String notes(Model model, HttpSession session) {
-        User userLoggedIn = getCurrentUser(session);
-        ProfilEtudiant profilEtudiant = getCurrentProfil(session);
-        
+        User userLoggedIn = userService.getCurrentUser(session);
+        ProfilEtudiant profilEtudiant = userService.getCurrentProfil(session);
+
         if (userLoggedIn == null) {
             return "redirect:/login";
         }
@@ -90,9 +59,9 @@ public class EtudiantController {
 
     @GetMapping("/etudiant/devoirs")
     public String devoirs(Model model, HttpSession session) {
-        User userLoggedIn = getCurrentUser(session);
-        ProfilEtudiant profilEtudiant = getCurrentProfil(session);
-        
+        User userLoggedIn = userService.getCurrentUser(session);
+        ProfilEtudiant profilEtudiant = userService.getCurrentProfil(session);
+
         if (userLoggedIn == null) {
             return "redirect:/login";
         }
@@ -107,9 +76,9 @@ public class EtudiantController {
 
     @GetMapping("/etudiant/bulletin")
     public String bulletin(Model model, HttpSession session) {
-        User userLoggedIn = getCurrentUser(session);
-        ProfilEtudiant profilEtudiant = getCurrentProfil(session);
-        
+        User userLoggedIn = userService.getCurrentUser(session);
+        ProfilEtudiant profilEtudiant = userService.getCurrentProfil(session);
+
         if (userLoggedIn == null) {
             return "redirect:/login";
         }
