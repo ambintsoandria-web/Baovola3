@@ -195,4 +195,4 @@ SELECT * FROM emploi_du_temps JOIN affectations_enseignement ON emploi_du_temps.
 
 
 SELECT * FROM users WHERE email = ? AND password = ?
-SELECT id FROM prof_etudiants 
+SELECT id FROM profils_etudiants WHERE user_id = 1;
