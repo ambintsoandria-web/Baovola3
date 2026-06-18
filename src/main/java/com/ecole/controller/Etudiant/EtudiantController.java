@@ -20,13 +20,48 @@ public class EtudiantController {
     @Autowired
     public UserService userService;
 
+    // Méthode pour récupérer l'utilisateur depuis la session ou le charger
+    private User getCurrentUser(HttpSession session) {
+        User user = (User) session.getAttribute("userLoggedIn");
+        
+        if (user == null) {
+            // Charger depuis la base une seule fois
+            user = userRepository.findByEmailAndPassword("rakoto.jean@lycee.mg", "a");
+            if (user != null) {
+                session.setAttribute("userLoggedIn", user);
+                
+                // Charger aussi le profil
+                ProfilEtudiant profil = userRepository.findProfilEtudiantByUserId(user.getId());
+                session.setAttribute("profilEtudiant", profil);
+            }
+        }
+        
+        return user;
+    }
+
+    // Méthode pour récupérer le profil
+    private ProfilEtudiant getCurrentProfil(HttpSession session) {
+        ProfilEtudiant profil = (ProfilEtudiant) session.getAttribute("profilEtudiant");
+        
+        if (profil == null) {
+            User user = getCurrentUser(session);
+            if (user != null) {
+                profil = userRepository.findProfilEtudiantByUserId(user.getId());
+                session.setAttribute("profilEtudiant", profil);
+            }
+        }
+        
+        return profil;
+    }
+
     @GetMapping("/etudiant/emploi")
     public String emploi(Model model, HttpSession session) {
-        User userLoggedIn = userRepository.findByEmailAndPassword("rakoto.jean@lycee.mg", "a");
-        ProfilEtudiant profilEtudiant = userRepository.findProfilEtudiantByUserId(userLoggedIn.getId());
-
-        session.setAttribute("userLoggedIn", userLoggedIn);
-        session.setAttribute("profilEtudiant", profilEtudiant);
+        User userLoggedIn = getCurrentUser(session);
+        ProfilEtudiant profilEtudiant = getCurrentProfil(session);
+        
+        if (userLoggedIn == null) {
+            return "redirect:/login";
+        }
 
         model.addAttribute("pageTitle", "Mon Emploi du Temps");
         model.addAttribute("currentRole", "etudiant");
@@ -38,11 +73,12 @@ public class EtudiantController {
 
     @GetMapping("/etudiant/notes")
     public String notes(Model model, HttpSession session) {
-        User userLoggedIn = userRepository.findByEmailAndPassword("rakoto.jean@lycee.mg", "a");
-        ProfilEtudiant profilEtudiant = userRepository.findProfilEtudiantByUserId(userLoggedIn.getId());
-
-        session.setAttribute("userLoggedIn", userLoggedIn);
-        session.setAttribute("profilEtudiant", profilEtudiant);
+        User userLoggedIn = getCurrentUser(session);
+        ProfilEtudiant profilEtudiant = getCurrentProfil(session);
+        
+        if (userLoggedIn == null) {
+            return "redirect:/login";
+        }
 
         model.addAttribute("pageTitle", "Mes Notes");
         model.addAttribute("currentRole", "etudiant");
@@ -54,11 +90,12 @@ public class EtudiantController {
 
     @GetMapping("/etudiant/devoirs")
     public String devoirs(Model model, HttpSession session) {
-        User userLoggedIn = userRepository.findByEmailAndPassword("rakoto.jean@lycee.mg", "a");
-        ProfilEtudiant profilEtudiant = userRepository.findProfilEtudiantByUserId(userLoggedIn.getId());
-
-        session.setAttribute("userLoggedIn", userLoggedIn);
-        session.setAttribute("profilEtudiant", profilEtudiant);
+        User userLoggedIn = getCurrentUser(session);
+        ProfilEtudiant profilEtudiant = getCurrentProfil(session);
+        
+        if (userLoggedIn == null) {
+            return "redirect:/login";
+        }
 
         model.addAttribute("pageTitle", "Devoirs & Leçons");
         model.addAttribute("currentRole", "etudiant");
@@ -70,11 +107,12 @@ public class EtudiantController {
 
     @GetMapping("/etudiant/bulletin")
     public String bulletin(Model model, HttpSession session) {
-        User userLoggedIn = userRepository.findByEmailAndPassword("rakoto.jean@lycee.mg", "a");
-        ProfilEtudiant profilEtudiant = userRepository.findProfilEtudiantByUserId(userLoggedIn.getId());
-
-        session.setAttribute("userLoggedIn", userLoggedIn);
-        session.setAttribute("profilEtudiant", profilEtudiant);
+        User userLoggedIn = getCurrentUser(session);
+        ProfilEtudiant profilEtudiant = getCurrentProfil(session);
+        
+        if (userLoggedIn == null) {
+            return "redirect:/login";
+        }
 
         model.addAttribute("pageTitle", "Mon Bulletin");
         model.addAttribute("currentRole", "etudiant");

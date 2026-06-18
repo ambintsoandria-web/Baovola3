@@ -13,4 +13,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT p FROM ProfilEtudiant p WHERE p.userId = :userId")
     ProfilEtudiant findProfilEtudiantByUserId(@Param("userId") Long userId);
+
+    // @Query(value = """
+    //         SELECT salle_id FROM inscriptions
+    //         JOIN classes ON inscriptions.classe_id = classes.id
+    //         WHERE inscriptions.etudiant_id = :etudiant_id
+    //         AND inscriptions.annee_scolaire_id = :annee_scolaire_id
+    //         """, nativeQuery = true)
+    // Integer getClasseEtudiant(@Param("id_annee_scolaire") Integer id_annee_scolaire);
 }

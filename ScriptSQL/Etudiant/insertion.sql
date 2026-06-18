@@ -1,5 +1,5 @@
 -- ============================================================
--- SCRIPT COMPLET D'INSERTION DES DONNÉES DE TEST (CORRIGÉ)
+-- SCRIPT COMPLET D'INSERTION AVEC HORAIRE_EDT (CORRIGÉ)
 -- ============================================================
 
 BEGIN;
@@ -68,7 +68,8 @@ INSERT INTO periodes (annee_scolaire_id, libelle, type, ordre, date_debut, date_
 -- 9. ROLES
 INSERT INTO roles (nom, description, created_at) VALUES 
 ('etudiant', 'Consultation notes, dossier, emploi du temps', NOW()),
-('professeur', 'Saisie notes, absences, emploi du temps', NOW());
+('professeur', 'Saisie notes, absences, emploi du temps', NOW())
+ON CONFLICT (nom) DO NOTHING;
 
 -- 10. USERS
 INSERT INTO users (email, password, is_active, last_login, created_at, updated_at) VALUES 
@@ -113,7 +114,7 @@ INSERT INTO profils_professeurs (user_id, matricule, nom, prenom, date_naissance
 INSERT INTO inscriptions (etudiant_id, classe_id, annee_scolaire_id, type_inscription, date_inscription, statut, created_at, updated_at) VALUES 
 (1, 5, 1, 'reinscription', '2025-09-10', 'active', NOW(), NOW());
 
--- 15. AFFECTATIONS ENSEIGNEMENT (CORRIGÉ: heures_hebdo au lieu de horas_hebdo)
+-- 15. AFFECTATIONS ENSEIGNEMENT
 INSERT INTO affectations_enseignement (professeur_id, matiere_id, classe_id, annee_scolaire_id, heures_hebdo, created_at) VALUES 
 (1, 1, 5, 1, 6.0, NOW()),
 (2, 2, 5, 1, 5.0, NOW()),
@@ -124,24 +125,32 @@ INSERT INTO affectations_enseignement (professeur_id, matiere_id, classe_id, ann
 (7, 7, 5, 1, 4.0, NOW()),
 (8, 8, 5, 1, 2.0, NOW());
 
--- 16. EMPLOI DU TEMPS
-INSERT INTO emploi_du_temps (affectation_id, salle_id, jour_semaine, heure_debut, heure_fin, date_debut_validite, created_at) VALUES 
-(1, 1, 1, '07:30:00', '09:00:00', '2025-09-15', NOW()),
-(1, 1, 3, '07:30:00', '09:00:00', '2025-09-15', NOW()),
-(2, 2, 1, '09:15:00', '10:45:00', '2025-09-15', NOW()),
-(2, 2, 4, '09:15:00', '10:45:00', '2025-09-15', NOW()),
-(3, 3, 2, '11:00:00', '12:30:00', '2025-09-15', NOW()),
-(3, 3, 4, '11:00:00', '12:30:00', '2025-09-15', NOW()),
-(4, 5, 3, '09:15:00', '10:45:00', '2025-09-15', NOW()),
-(4, 5, 5, '09:15:00', '10:45:00', '2025-09-15', NOW()),
-(5, 4, 2, '07:30:00', '09:00:00', '2025-09-15', NOW()),
-(5, 4, 4, '07:30:00', '09:00:00', '2025-09-15', NOW()),
-(6, 6, 1, '13:30:00', '15:00:00', '2025-09-15', NOW()),
-(6, 6, 3, '13:30:00', '15:00:00', '2025-09-15', NOW()),
-(7, 2, 2, '13:30:00', '15:00:00', '2025-09-15', NOW()),
-(8, 1, 5, '13:30:00', '15:00:00', '2025-09-15', NOW());
+-- 16. HORAIRE_EDT (SANS ON CONFLICT)
+INSERT INTO horaire_edt (libelle, heure_debut, heure_fin, ordre, is_active, created_at) VALUES 
+('07h30 - 09h00', '07:30:00', '09:00:00', 1, TRUE, NOW()),
+('09h15 - 10h45', '09:15:00', '10:45:00', 2, TRUE, NOW()),
+('11h00 - 12h30', '11:00:00', '12:30:00', 3, TRUE, NOW()),
+('13h30 - 15h00', '13:30:00', '15:00:00', 4, TRUE, NOW()),
+('15h15 - 16h45', '15:15:00', '16:45:00', 5, TRUE, NOW());
 
--- 17. SEANCES
+-- 17. EMPLOI DU TEMPS (avec horaire_edt_id)
+INSERT INTO emploi_du_temps (affectation_id, salle_id, horaire_edt_id, jour_semaine, heure_debut, heure_fin, date_debut_validite, created_at) VALUES 
+(1, 1, 1, 1, '07:30:00', '09:00:00', '2025-09-15', NOW()),
+(1, 1, 1, 3, '07:30:00', '09:00:00', '2025-09-15', NOW()),
+(2, 2, 2, 1, '09:15:00', '10:45:00', '2025-09-15', NOW()),
+(2, 2, 2, 4, '09:15:00', '10:45:00', '2025-09-15', NOW()),
+(3, 3, 3, 2, '11:00:00', '12:30:00', '2025-09-15', NOW()),
+(3, 3, 3, 4, '11:00:00', '12:30:00', '2025-09-15', NOW()),
+(4, 5, 2, 3, '09:15:00', '10:45:00', '2025-09-15', NOW()),
+(4, 5, 2, 5, '09:15:00', '10:45:00', '2025-09-15', NOW()),
+(5, 4, 1, 2, '07:30:00', '09:00:00', '2025-09-15', NOW()),
+(5, 4, 1, 4, '07:30:00', '09:00:00', '2025-09-15', NOW()),
+(6, 6, 4, 1, '13:30:00', '15:00:00', '2025-09-15', NOW()),
+(6, 6, 4, 3, '13:30:00', '15:00:00', '2025-09-15', NOW()),
+(7, 2, 4, 2, '13:30:00', '15:00:00', '2025-09-15', NOW()),
+(8, 1, 4, 5, '13:30:00', '15:00:00', '2025-09-15', NOW());
+
+-- 18. SEANCES
 INSERT INTO seances (emploi_du_temps_id, date_seance, heure_debut, heure_fin, a_eu_lieu, created_at) VALUES 
 (1, '2025-09-15', '07:30:00', '09:00:00', TRUE, NOW()),
 (2, '2025-09-17', '07:30:00', '09:00:00', TRUE, NOW()),
@@ -158,7 +167,7 @@ INSERT INTO seances (emploi_du_temps_id, date_seance, heure_debut, heure_fin, a_
 (13, '2025-09-16', '13:30:00', '15:00:00', TRUE, NOW()),
 (14, '2025-09-19', '13:30:00', '15:00:00', TRUE, NOW());
 
--- 18. NOTES
+-- 19. NOTES
 INSERT INTO notes (etudiant_id, affectation_id, periode_id, type_evaluation, valeur, sur, saisi_par, created_at, updated_at) VALUES 
 (1, 1, 1, 'devoir_1', 15.50, 20, 1, NOW(), NOW()),
 (1, 1, 1, 'devoir_2', 17.00, 20, 1, NOW(), NOW()),
@@ -185,14 +194,34 @@ SELECT COUNT(*) as prof_etudiants FROM profils_etudiants;
 SELECT COUNT(*) as prof_professeurs FROM profils_professeurs;
 SELECT COUNT(*) as inscriptions FROM inscriptions;
 SELECT COUNT(*) as affectations FROM affectations_enseignement;
+SELECT COUNT(*) as horaire_edt FROM horaire_edt;
 SELECT COUNT(*) as emploi_du_temps FROM emploi_du_temps;
 SELECT COUNT(*) as seances FROM seances;
 SELECT COUNT(*) as notes FROM notes;
 
+-- Vérification de l'emploi du temps avec horaires
+SELECT 
+    e.id,
+    e.jour_semaine,
+    h.libelle AS horaire,
+    m.nom AS matiere,
+    p.nom AS professeur,
+    s.nom AS salle
+FROM emploi_du_temps e
+JOIN horaire_edt h ON e.horaire_edt_id = h.id
+JOIN affectations_enseignement a ON e.affectation_id = a.id
+JOIN matieres m ON a.matiere_id = m.id
+JOIN profils_professeurs p ON a.professeur_id = p.id
+JOIN salles s ON e.salle_id = s.id
+ORDER BY e.jour_semaine, h.ordre;
 
-SELECT * FROM emploi_du_temps JOIN affectations_enseignement ON emploi_du_temps.affectation_id = affectations_enseignement.id;
+
+SELECT * FROM inscriptions JOIN classes ON inscriptions.classe_id = classes.id 
 
 
+SELECT classe_id FROM inscriptions  WHERE etudiant_id = 1 AND annee_scolaire_id = 1;
 
-SELECT * FROM users WHERE email = ? AND password = ?
-SELECT id FROM profils_etudiants WHERE user_id = 1;
+SELECT salle_id FROM inscriptions JOIN classes ON inscriptions.classe_id = classes.id WHERE inscriptions.etudiant_id = 1 AND inscriptions.annee_scolaire_id = 1;
+
+
+SELECT * FROM emploi_du_temps WHERE salle_id = 1;
