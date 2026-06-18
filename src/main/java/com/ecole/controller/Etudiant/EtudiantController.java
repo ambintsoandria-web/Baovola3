@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.ecole.entity.Etudiant.ProfilEtudiant;
 import com.ecole.entity.Etudiant.User;
 import com.ecole.repository.Etudiant.UserRepository;
 import com.ecole.service.Etudiant.UserService;
@@ -22,9 +23,10 @@ public class EtudiantController {
     @GetMapping("/etudiant/emploi")
     public String emploi(Model model, HttpSession session) {
         User userLoggedIn = (User) session.getAttribute("userLoggedIn");
-
-        if (userLoggedIn == null) {
+        ProfilEtudiant profilEtudiant = (ProfilEtudiant) session.getAttribute("profilEtudiant");
+        if (userLoggedIn == null && profilEtudiant == null) {
             userLoggedIn = userRepository.findByEmailAndPassword("rakoto.jean@lycee.mg", "a");
+            profilEtudiant = userRepository.findProfilEtudiantByUserId(userLoggedIn.getId());
             session.setAttribute("userLoggedIn", userLoggedIn);
         }
 
