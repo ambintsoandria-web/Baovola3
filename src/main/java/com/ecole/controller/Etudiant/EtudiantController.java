@@ -1,5 +1,9 @@
 package com.ecole.controller.Etudiant;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.ecole.entity.Etudiant.EmploiDuTemps;
 import com.ecole.entity.Etudiant.ProfilEtudiant;
 import com.ecole.entity.Etudiant.User;
+import com.ecole.entity.Etudiant.HoraireEdt;
+import com.ecole.repository.Etudiant.EmploiDuTempsRepository;
+import com.ecole.repository.Etudiant.HoraireEdtRepository;
 import com.ecole.repository.Etudiant.UserRepository;
 import com.ecole.service.Etudiant.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -22,20 +30,77 @@ public class EtudiantController {
     @Autowired
     public UserService userService;
 
+    @Autowired
+    public EmploiDuTempsRepository emploiDuTempsRepository;
+
+    @Autowired
+    public HoraireEdtRepository horaireEdtRepository;
+
+    private final List<String> JOURS = Arrays.asList("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi");
+
     @GetMapping("/etudiant/emploi")
     public String emploi(Model model, HttpSession session) {
         User userLoggedIn = userService.getCurrentUser(session);
         ProfilEtudiant profilEtudiant = userService.getCurrentProfil(session);
-        // List<EmploiDuTemps> emploiDuTemps = emploiDuTempsRepository.findBySalleId(userRepository);
 
         if (userLoggedIn == null) {
             return "redirect:/login";
+        }
+
+        Integer salleId = userService.getSalleEtudiant(userLoggedIn.getId().intValue());
+
+        List<EmploiDuTemps> emploiDuTemps = new ArrayList<>();
+        List<HoraireEdt> horaires = new ArrayList<>();
+
+        if (salleId != null) {
+            Long periodeId = 1L;
+
+            List<Object[]> results = emploiDuTempsRepository.findEmploiWithDetails(
+                    salleId.longValue(), periodeId);
+
+            for (Object[] row : results) {
+                EmploiDuTemps e = new EmploiDuTemps();
+                e.setId(((Number) row[0]).longValue());
+                e.setAffectationId(((Number) row[1]).longValue());
+                e.setSalleId(((Number) row[2]).longValue());
+                e.setJourSemaine((Integer) row[3]);
+
+                if (row[4] != null) {
+                    e.setHeureDebut(((Time) row[4]).toLocalTime());
+                }
+                if (row[5] != null) {
+                    e.setHeureFin(((Time) row[5]).toLocalTime());
+                }
+
+                if (row[6] != null) {
+                    e.setDateDebutValidite(((java.sql.Date) row[6]).toLocalDate());
+                }
+                if (row[7] != null) {
+                    e.setDateFinValidite(((java.sql.Date) row[7]).toLocalDate());
+                }
+                if (row[8] != null) {
+                    e.setCreatedAt(((Timestamp) row[8]).toLocalDateTime());
+                }
+
+                e.setHoraireEdtId(((Number) row[9]).longValue());
+                e.setPeriodeId(((Number) row[10]).longValue());
+                e.setMatiereNom((String) row[11]);
+                e.setProfesseurNom((String) row[12]);
+                e.setProfesseurPrenom((String) row[13]);
+
+                emploiDuTemps.add(e);
+            }
+
+            horaires = horaireEdtRepository.findAllOrderByOrdre();
         }
 
         model.addAttribute("pageTitle", "Mon Emploi du Temps");
         model.addAttribute("currentRole", "etudiant");
         model.addAttribute("user", userLoggedIn);
         model.addAttribute("profilEtudiant", profilEtudiant);
+        model.addAttribute("emploiDuTemps", emploiDuTemps);
+        model.addAttribute("horaires", horaires);
+        model.addAttribute("jours", JOURS);
 
         return "Etudiant/calendar";
     }
