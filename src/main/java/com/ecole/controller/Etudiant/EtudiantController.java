@@ -1,5 +1,7 @@
 package com.ecole.controller.Etudiant;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,11 +24,13 @@ public class EtudiantController {
 
     @GetMapping("/etudiant/emploi")
     public String emploi(Model model, HttpSession session) {
-        User userLoggedIn = userRepository.findByEmailAndPassword("rakoto.jean@lycee.mg", "a");
-        ProfilEtudiant profilEtudiant = userRepository.findProfilEtudiantByUserId(userLoggedIn.getId());
+        User userLoggedIn = userService.getCurrentUser(session);
+        ProfilEtudiant profilEtudiant = userService.getCurrentProfil(session);
+        // List<EmploiDuTemps> emploiDuTemps = emploiDuTempsRepository.findBySalleId(userRepository);
 
-        session.setAttribute("userLoggedIn", userLoggedIn);
-        session.setAttribute("profilEtudiant", profilEtudiant);
+        if (userLoggedIn == null) {
+            return "redirect:/login";
+        }
 
         model.addAttribute("pageTitle", "Mon Emploi du Temps");
         model.addAttribute("currentRole", "etudiant");
@@ -38,11 +42,12 @@ public class EtudiantController {
 
     @GetMapping("/etudiant/notes")
     public String notes(Model model, HttpSession session) {
-        User userLoggedIn = userRepository.findByEmailAndPassword("rakoto.jean@lycee.mg", "a");
-        ProfilEtudiant profilEtudiant = userRepository.findProfilEtudiantByUserId(userLoggedIn.getId());
+        User userLoggedIn = userService.getCurrentUser(session);
+        ProfilEtudiant profilEtudiant = userService.getCurrentProfil(session);
 
-        session.setAttribute("userLoggedIn", userLoggedIn);
-        session.setAttribute("profilEtudiant", profilEtudiant);
+        if (userLoggedIn == null) {
+            return "redirect:/login";
+        }
 
         model.addAttribute("pageTitle", "Mes Notes");
         model.addAttribute("currentRole", "etudiant");
@@ -54,11 +59,12 @@ public class EtudiantController {
 
     @GetMapping("/etudiant/devoirs")
     public String devoirs(Model model, HttpSession session) {
-        User userLoggedIn = userRepository.findByEmailAndPassword("rakoto.jean@lycee.mg", "a");
-        ProfilEtudiant profilEtudiant = userRepository.findProfilEtudiantByUserId(userLoggedIn.getId());
+        User userLoggedIn = userService.getCurrentUser(session);
+        ProfilEtudiant profilEtudiant = userService.getCurrentProfil(session);
 
-        session.setAttribute("userLoggedIn", userLoggedIn);
-        session.setAttribute("profilEtudiant", profilEtudiant);
+        if (userLoggedIn == null) {
+            return "redirect:/login";
+        }
 
         model.addAttribute("pageTitle", "Devoirs & Leçons");
         model.addAttribute("currentRole", "etudiant");
@@ -70,11 +76,12 @@ public class EtudiantController {
 
     @GetMapping("/etudiant/bulletin")
     public String bulletin(Model model, HttpSession session) {
-        User userLoggedIn = userRepository.findByEmailAndPassword("rakoto.jean@lycee.mg", "a");
-        ProfilEtudiant profilEtudiant = userRepository.findProfilEtudiantByUserId(userLoggedIn.getId());
+        User userLoggedIn = userService.getCurrentUser(session);
+        ProfilEtudiant profilEtudiant = userService.getCurrentProfil(session);
 
-        session.setAttribute("userLoggedIn", userLoggedIn);
-        session.setAttribute("profilEtudiant", profilEtudiant);
+        if (userLoggedIn == null) {
+            return "redirect:/login";
+        }
 
         model.addAttribute("pageTitle", "Mon Bulletin");
         model.addAttribute("currentRole", "etudiant");
