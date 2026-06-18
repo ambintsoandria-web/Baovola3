@@ -90,4 +90,21 @@ public class EtudiantController {
 
         return "Etudiant/bulletin";
     }
+
+    @GetMapping("/etudiant/profil")
+    public String profil(Model model, HttpSession session) {
+        User userLoggedIn = userService.getCurrentUser(session);
+        ProfilEtudiant profilEtudiant = userService.getCurrentProfil(session);
+
+        if (userLoggedIn == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("pageTitle", "Mon Profil");
+        model.addAttribute("currentRole", "etudiant");
+        model.addAttribute("user", userLoggedIn);
+        model.addAttribute("profilEtudiant", profilEtudiant);
+
+        return "Etudiant/profil";
+    }
 }

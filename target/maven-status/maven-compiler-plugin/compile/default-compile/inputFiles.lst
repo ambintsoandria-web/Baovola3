@@ -11,10 +11,12 @@ D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\AffectationEnseign
 D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\AnneeScolaire.java
 D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\Classe.java
 D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\Coefficient.java
+D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\Devoir.java
 D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\EmploiDuTemps.java
 D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\Etablissement.java
 D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\HoraireEdt.java
 D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\Inscription.java
+D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\Lecon.java
 D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\Matiere.java
 D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\Moyenne.java
 D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\Niveau.java

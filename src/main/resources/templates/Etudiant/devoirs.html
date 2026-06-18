@@ -19,8 +19,19 @@
             <span class="badge badge-amber">Mathématiques</span>
             <span class="badge badge-red">Dans 2 jours</span>
           </div>
-        </div>
-        <div class="devoir-card" style="border-left-color:var(--success);">
+        </div> 
+
+        {% comment %} <div class="devoir-card" th:each ="devoir :${devoirs}">
+         <h4 th:text ="${devoir.titre}"></h4>
+         <div class ="due">
+            📅 À rendre:
+            <span th:text="$devoir.dateLimite"></span>
+         </div>
+         <p th:text="${devoir.description}"></p>
+
+        </div> {% endcomment %}
+        
+       <div class="devoir-card" style="border-left-color:var(--success);">
           <h4>Leçon — Génétique et Hérédité</h4>
           <div class="due" style="color:var(--success);">📅 Pour: 21 Avril 2026</div>
           <p>Relire le chapitre 8 de SVT. Mémoriser les lois de Mendel.</p>
@@ -28,8 +39,8 @@
             <span class="badge badge-violet">SVT</span>
             <span class="badge badge-green">Dans 5 jours</span>
           </div>
-        </div>
-        <div class="devoir-card" style="border-left-color:var(--b);">
+        </div> 
+       <div class="devoir-card" style="border-left-color:var(--b);">
           <h4>Dissertation — La Négritude</h4>
           <div class="due" style="color:var(--b);">📅 À rendre: 25 Avril 2026</div>
           <p>Rédiger une dissertation de 3 pages sur le mouvement de la Négritude. Plan détaillé obligatoire.</p>
@@ -38,6 +49,15 @@
             <span class="badge badge-green">Dans 9 jours</span>
           </div>
         </div>
+           {% comment %} <div class="lecon-card" th:each ="lecon :${lecons}">
+             <h4 th:text = "${lecon.titre}"> </h4>   
+             <div class="due">
+                 <span th:text ="$lecon.contenu"></span>
+             </div> {% endcomment %}
+
+
+           </div>
+
       </div>
   </main>
 </div>

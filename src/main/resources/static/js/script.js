@@ -23,13 +23,13 @@ const roles = {
     defaultPage: 'emploi',
     nav: 'nav-professeur'
   },
-  // etudiant: {
-  //   name: 'Rakoto Jean',
-  //   role: 'Étudiant',
-  //   initials: 'RJ',
-  //   defaultPage: 'emploi',
-  //   nav: 'nav-etudiant'
-  // }
+  etudiant: {
+     name: 'Rakoto Jean',
+     role: 'Étudiant',
+     initials: 'RJ',
+     defaultPage: 'profil',
+     nav: 'nav-etudiant'
+   }
 };
 
 const pageTitles = {
@@ -47,10 +47,11 @@ const pageTitles = {
   'prof-devoirs': 'Devoirs & Leçons',
   'prof-bulletins': 'Bulletins',
   'prof-profil': 'Mon Profil',
-  'etu-emploi': 'Mon Emploi du Temps',
-  'etu-notes': 'Mes Notes',
-  'etu-bulletin': 'Mon Bulletin',
-  'etu-devoirs': 'Devoirs & Leçons',
+  'etu-profil': 'Mon Profil',
+   'etu-emploi': 'Mon Emploi du Temps',
+   'etu-notes': 'Mes Notes',
+   'etu-bulletin': 'Mon Bulletin',
+   'etu-devoirs': 'Devoirs & Leçons',
   'actualites': 'Actualités',
   'notifications-page': 'Notifications',
 };

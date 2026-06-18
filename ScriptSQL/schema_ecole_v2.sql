@@ -915,7 +915,25 @@ CREATE TABLE audit_log (
     created_at        TIMESTAMP DEFAULT NOW()
 );
 
+CREATE TABLE devoirs (
+    id SERIAL PRIMARY KEY,
+    matiere_id INT REFERENCES matieres(id),
+    professeur_id INT REFERENCES profils_professeurs(id),
+    titre VARCHAR(255),
+    affectation_id INT REFERENCES affectations_enseignement(id),
+    description TEXT,
+    date_limite DATE
+);
 
+CREATE TABLE lecons (
+    id SERIAL PRIMARY KEY,
+    affectation_id INT REFERENCES affectations_enseignement(id),
+    titre VARCHAR(255) NOT NULL,
+    contenu TEXT,
+    date_publication DATE DEFAULT CURRENT_DATE,
+    document_url VARCHAR(500),
+    created_at TIMESTAMP DEFAULT NOW()
+);
 -- ============================================================
 -- SECTION 16 — INDEX DE PERFORMANCE
 -- ============================================================
