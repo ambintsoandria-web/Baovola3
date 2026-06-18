@@ -191,3 +191,8 @@ SELECT COUNT(*) as notes FROM notes;
 
 
 SELECT * FROM emploi_du_temps JOIN affectations_enseignement ON emploi_du_temps.affectation_id = affectations_enseignement.id;
+
+
+
+SELECT * FROM users WHERE email = ? AND password = ?
+SELECT id FROM prof_etudiants 
