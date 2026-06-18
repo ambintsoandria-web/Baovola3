@@ -1,7 +1,7 @@
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/EcoleApplication.java
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/controller/CommunsController.java
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/controller/DirecteurController.java
-/home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/controller/EtudiantController.java
+/home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/controller/Etudiant/EtudiantController.java
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/controller/FragmentController.java
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/controller/HomeController.java
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/controller/ProfesseurController.java
@@ -26,3 +26,5 @@
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/entity/Etudiant/Seance.java
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/entity/Etudiant/User.java
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/entity/Etudiant/UserRole.java
+/home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/repository/Etudiant/UserRepository.java
+/home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/service/Etudiant/UserService.java
