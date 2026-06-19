@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.ecole.entity.Etudiant.Devoir;
 import com.ecole.entity.Etudiant.Inscription;
 import com.ecole.entity.Etudiant.Lecon;
+import com.ecole.entity.Etudiant.Note;
 import com.ecole.entity.Etudiant.ProfilEtudiant;
 import com.ecole.entity.Etudiant.User;
 import com.ecole.repository.Etudiant.DevoirRepository;
 import com.ecole.repository.Etudiant.InscriptionRepository;
 import com.ecole.repository.Etudiant.LeconRepository;
+import com.ecole.repository.Etudiant.NoteRepository;
 import com.ecole.repository.Etudiant.UserRepository;
 import com.ecole.service.Etudiant.UserService;
 
@@ -38,6 +40,9 @@ public class EtudiantController {
     @Autowired
     public LeconRepository leconRepository;
 
+    @Autowired
+    public NoteRepository noteRepository;
+    
     @GetMapping("/etudiant/emploi")
     public String emploi(Model model, HttpSession session) {
 
@@ -64,12 +69,20 @@ public class EtudiantController {
         if (userLoggedIn == null) {
             return "redirect:/login";
         }
+      
+      // L'ID étudiant est l'ID du profil étudiant lui-même
+      Long etudiantId = profilEtudiant.getId();
 
+      List<Note> notes = (etudiantId != null) ? noteRepository.findNotesParEtudiant(etudiantId):List.of();
+          
+
+
+        
         model.addAttribute("pageTitle", "Mes Notes");
         model.addAttribute("currentRole", "etudiant");
         model.addAttribute("user", userLoggedIn);
         model.addAttribute("profilEtudiant", profilEtudiant);
-
+        model.addAttribute("notes", notes);
         return "Etudiant/notes";
     }
 
@@ -97,7 +110,7 @@ public class EtudiantController {
 
         model.addAttribute("pageTitle", "Devoirs & Leçons");
         model.addAttribute("currentRole", "etudiant");
-        model.addAttribute("user", userLoggedIn);
+        model.addAttribute("user", userLoggedIn);   
         model.addAttribute("profilEtudiant", profilEtudiant);
         model.addAttribute("devoirs", devoirs);
         model.addAttribute("lecons", lecons);

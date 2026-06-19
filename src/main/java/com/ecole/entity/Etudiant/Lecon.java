@@ -14,7 +14,16 @@ public class Lecon {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "affectation_id")
-    private AffectationEnseignement affectationId;
+    private AffectationEnseignement affectation;
+    
+    // Méthode pour compatibilité
+    public AffectationEnseignement getAffectationId() {
+        return affectation;
+    }
+    
+    public void setAffectationId(AffectationEnseignement affectation) {
+        this.affectation = affectation;
+    }
 
     private String titre;
 
@@ -37,12 +46,12 @@ public class Lecon {
         this.id = id;
     }
 
-    public AffectationEnseignement getAffectationId() {
-        return affectationId;
+    public AffectationEnseignement getAffectation() {
+        return affectation;
     }
 
-    public void setAffectationId(AffectationEnseignement affectationId) {
-        this.affectationId = affectationId;
+    public void setAffectation(AffectationEnseignement affectation) {
+        this.affectation = affectation;
     }
 
     public String getTitre() {

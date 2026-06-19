@@ -460,7 +460,7 @@ CREATE TABLE notes (
     est_valide      BOOLEAN DEFAULT TRUE,
     -- Traçabilité des corrections (nécessite validation secrétariat)
     ancienne_valeur NUMERIC(5,2),                     -- valeur avant correction
-    corrige_par     INT REFERENCES users(id),
+    corrige_par     INT REFERENCES users(id)s,
     date_correction TIMESTAMP,
     motif_correction TEXT,
     created_at      TIMESTAMP DEFAULT NOW(),

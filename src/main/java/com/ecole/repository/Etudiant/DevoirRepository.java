@@ -12,20 +12,20 @@ import com.ecole.entity.Etudiant.Devoir;
 
 public interface DevoirRepository extends JpaRepository<Devoir, Long> {
 
-    List<Devoir> findByAffectationId(AffectationEnseignement affectationId);
+    List<Devoir> findByAffectation(AffectationEnseignement affectation);
 
     List<Devoir> findByEstActifTrue();
 
     List<Devoir> findByDateLimiteAfter(LocalDate date);
 
-    List<Devoir> findByAffectationIdAndEstActifTrue(AffectationEnseignement affectationId);
+    List<Devoir> findByAffectationAndEstActif(AffectationEnseignement affectation, Boolean estActif);
 
 
 
     @Query("""
                 SELECT DISTINCT d
                 FROM Devoir d
-                JOIN FETCH d.affectationId a
+                JOIN FETCH d.affectation a
                 JOIN FETCH a.professeur p
                 JOIN FETCH a.matiere m
                 WHERE a.classeId = :classeId

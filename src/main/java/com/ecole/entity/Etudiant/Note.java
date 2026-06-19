@@ -15,8 +15,9 @@ public class Note {
     @Column(name = "etudiant_id")
     private Long etudiantId;
     
-    @Column(name = "affectation_id")
-    private Long affectationId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "affectation_id")
+    private AffectationEnseignement affectation;
     
     @Column(name = "periode_id")
     private Long periodeId;
@@ -65,8 +66,8 @@ public class Note {
     public void setId(Long id) { this.id = id; }
     public Long getEtudiantId() { return etudiantId; }
     public void setEtudiantId(Long etudiantId) { this.etudiantId = etudiantId; }
-    public Long getAffectationId() { return affectationId; }
-    public void setAffectationId(Long affectationId) { this.affectationId = affectationId; }
+    public AffectationEnseignement getAffectation() { return affectation; }
+    public void setAffectation(AffectationEnseignement affectation) { this.affectation = affectation; }
     public Long getPeriodeId() { return periodeId; }
     public void setPeriodeId(Long periodeId) { this.periodeId = periodeId; }
     public String getTypeEvaluation() { return typeEvaluation; }

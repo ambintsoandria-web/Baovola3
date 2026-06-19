@@ -12,8 +12,8 @@
       </div>
       <div style="display:flex;flex-direction:column;gap:var(--sp-md);">
         <div class="devoir-card" th:each="devoir : ${devoirs}">
-          <h4 th:text="${devoir.affectationId?.professeur?.nom}">Professeur</h4>
-          <h4 th:text="${devoir.affectationId?.matiere?.nom}">Matière</h4>
+          <h4 th:text="${devoir.affectation?.professeur?.prenom + ' ' + devoir.affectation?.professeur?.nom}">Professeur</h4>
+          <h4 th:text="${devoir.affectation?.matiere?.nom}">Matière</h4>
           <h4 th:text="${devoir.titre}">Titre</h4>
           <div class="due">
             📅 À rendre:
