@@ -15,6 +15,36 @@
           <p th:text="${profilEtudiant != null ? profilEtudiant.prenom + ' ' + profilEtudiant.nom : ''}"></p>
         </div>
       </div>
+
+      <!-- FILTRES : Année scolaire et Période -->
+      <div class="filters" style="display:flex; gap:15px; margin-bottom:20px; flex-wrap:wrap;">
+        <!-- Sélecteur Année Scolaire -->
+        <div>
+          <label style="font-weight:600;">Année scolaire :</label>
+          <select th:name="anneeScolaireId" style="padding:8px 12px; border-radius:8px; border:1px solid #ddd;">
+            <option th:each="annee : ${anneesScolaires}" th:value="${annee.id}" th:text="${annee.libelle}"
+              th:selected="${annee.id == anneeScolaireId}">
+            </option>
+          </select>
+        </div>
+
+        <!-- Sélecteur Période -->
+        <div>
+          <label style="font-weight:600;">Période :</label>
+          <select th:name="periodeId" style="padding:8px 12px; border-radius:8px; border:1px solid #ddd;">
+            <option th:each="periode : ${periodes}" th:value="${periode.id}" th:text="${periode.libelle}"
+              th:selected="${periode.id == periodeId}">
+            </option>
+          </select>
+        </div>
+
+        <!-- Bouton Filtrer -->
+        <button onclick="filterEmploi()"
+          style="padding:8px 20px; background:var(--g); color:white; border:none; border-radius:8px; cursor:pointer;">
+          Filtrer
+        </button>
+      </div>
+
       <div class="card">
         <div class="card-body" style="padding:var(--sp-md);">
           <div class="schedule-grid">
@@ -29,7 +59,7 @@
               <div th:each="jourIndex : ${#numbers.sequence(0, 4)}" class="schedule-cell">
                 <div th:each="cours : ${emploiDuTemps}"
                   th:if="${cours != null and cours.jourSemaine == jourIndex + 1 and cours.heureDebut == horaire.heureDebut}"
-                  class="schedule-class math">
+                  class="schedule-class">
                   <span th:text="${cours.matiereNom}"></span>
                   <small th:text="${cours.professeurComplet}"></small>
                 </div>
@@ -41,6 +71,18 @@
     </main>
   </div>
   <div th:replace="~{fragments/footer :: footer}"></div>
+
+  <script>
+    function filterEmploi() {
+      var anneeId = document.querySelector('select[name="anneeScolaireId"]').value;
+      var periodeId = document.querySelector('select[name="periodeId"]').value;
+      window.location.href = '/etudiant/emploi?anneeScolaireId=' + anneeId + '&periodeId=' + periodeId;
+    }
+
+    // Auto-submit quand on change de sélection
+    document.querySelector('select[name="anneeScolaireId"]').addEventListener('change', filterEmploi);
+    document.querySelector('select[name="periodeId"]').addEventListener('change', filterEmploi);
+  </script>
 </body>
 
 </html>
