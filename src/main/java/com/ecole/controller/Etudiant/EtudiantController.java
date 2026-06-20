@@ -10,13 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ecole.entity.Etudiant.AnneeScolaire;
 import com.ecole.entity.Etudiant.EmploiDuTemps;
 import com.ecole.entity.Etudiant.ProfilEtudiant;
 import com.ecole.entity.Etudiant.User;
 import com.ecole.entity.Etudiant.HoraireEdt;
+import com.ecole.entity.Etudiant.Periode;
+import com.ecole.repository.Etudiant.AnneeScolaireRepository;
 import com.ecole.repository.Etudiant.EmploiDuTempsRepository;
 import com.ecole.repository.Etudiant.HoraireEdtRepository;
+import com.ecole.repository.Etudiant.PeriodeRepository;
 import com.ecole.repository.Etudiant.UserRepository;
 import com.ecole.service.Etudiant.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -36,10 +41,21 @@ public class EtudiantController {
     @Autowired
     public HoraireEdtRepository horaireEdtRepository;
 
+    @Autowired
+    public AnneeScolaireRepository anneeScolaireRepository;
+
+    @Autowired
+    public PeriodeRepository periodeRepository;
+
     private final List<String> JOURS = Arrays.asList("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi");
 
     @GetMapping("/etudiant/emploi")
-    public String emploi(Model model, HttpSession session) {
+    public String emploi(
+            Model model,
+            HttpSession session,
+            @RequestParam(required = false) Integer anneeScolaireId,
+            @RequestParam(required = false) Integer periodeId) {
+
         User userLoggedIn = userService.getCurrentUser(session);
         ProfilEtudiant profilEtudiant = userService.getCurrentProfil(session);
 
@@ -47,16 +63,35 @@ public class EtudiantController {
             return "redirect:/login";
         }
 
+        // Récupérer toutes les années scolaires de l'étudiant
+        List<AnneeScolaire> anneesScolaires = anneeScolaireRepository.getAnneesScolairesByEtudiant(
+                userLoggedIn.getId().intValue());
+
+        // Si aucune année sélectionnée, prendre la première
+        if (anneeScolaireId == null && !anneesScolaires.isEmpty()) {
+            anneeScolaireId = anneesScolaires.get(0).getId().intValue();
+        }
+
+        // Récupérer les périodes pour l'année sélectionnée
+        List<Periode> periodes = new ArrayList<>();
+        if (anneeScolaireId != null) {
+            periodes = periodeRepository.findByAnneeScolaireId(anneeScolaireId.longValue());
+        }
+
+        // Si aucune période sélectionnée, prendre la première
+        if (periodeId == null && !periodes.isEmpty()) {
+            periodeId = periodes.get(0).getId().intValue();
+        }
+
+        // Récupérer l'emploi du temps
         Integer salleId = userService.getSalleEtudiant(userLoggedIn.getId().intValue());
 
         List<EmploiDuTemps> emploiDuTemps = new ArrayList<>();
         List<HoraireEdt> horaires = new ArrayList<>();
 
-        if (salleId != null) {
-            Long periodeId = 1L;
-
+        if (salleId != null && periodeId != null) {
             List<Object[]> results = emploiDuTempsRepository.findEmploiWithDetails(
-                    salleId.longValue(), periodeId);
+                    salleId.longValue(), periodeId.longValue());
 
             for (Object[] row : results) {
                 EmploiDuTemps e = new EmploiDuTemps();
@@ -101,6 +136,10 @@ public class EtudiantController {
         model.addAttribute("emploiDuTemps", emploiDuTemps);
         model.addAttribute("horaires", horaires);
         model.addAttribute("jours", JOURS);
+        model.addAttribute("anneesScolaires", anneesScolaires);
+        model.addAttribute("anneeScolaireId", anneeScolaireId);
+        model.addAttribute("periodes", periodes);
+        model.addAttribute("periodeId", periodeId);
 
         return "Etudiant/calendar";
     }
