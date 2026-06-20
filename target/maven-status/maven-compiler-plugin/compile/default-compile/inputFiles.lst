@@ -27,6 +27,7 @@
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/entity/Etudiant/Seance.java
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/entity/Etudiant/User.java
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/entity/Etudiant/UserRole.java
+/home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/repository/Etudiant/AnneeScolaireRepository.java
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/repository/Etudiant/EmploiDuTempsRepository.java
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/repository/Etudiant/HoraireEdtRepository.java
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/repository/Etudiant/MatiereRepository.java
