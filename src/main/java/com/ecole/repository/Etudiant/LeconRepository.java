@@ -12,18 +12,26 @@ import com.ecole.entity.Etudiant.Lecon;
 
 public interface LeconRepository extends JpaRepository<Lecon, Long> {
 
-    List<Lecon> findByAffectation(AffectationEnseignement affectation);
+        List<Lecon> findByAffectation(AffectationEnseignement affectation);
 
-    List<Lecon> findByAffectationOrderByDatePublicationDesc(AffectationEnseignement affectation);
+        List<Lecon> findByAffectationOrderByDatePublicationDesc(AffectationEnseignement affectation);
 
-    List<Lecon> findByDatePublicationBeforeOrderByDatePublicationDesc(LocalDate date);
+        List<Lecon> findByDatePublicationBeforeOrderByDatePublicationDesc(LocalDate date);
 
-    List<Lecon> findByAffectationAndDatePublicationBefore(
-            AffectationEnseignement affectation,
-            LocalDate date);
+        List<Lecon> findByAffectationAndDatePublicationBefore(
+                        AffectationEnseignement affectation,
+                        LocalDate date);
 
-    @Query("SELECT l FROM Lecon l WHERE l.affectation = :affectation AND l.datePublication <= :date ORDER BY l.datePublication DESC")
-    List<Lecon> findPublieeesParAffectation(
-            @Param("affectation") AffectationEnseignement affectation,
-            @Param("date") LocalDate date);
+        @Query("SELECT l FROM Lecon l WHERE l.affectation = :affectation AND l.datePublication <= :date ORDER BY l.datePublication DESC")
+        List<Lecon> findPublieeesParAffectation(
+                        @Param("affectation") AffectationEnseignement affectation,
+                        @Param("date") LocalDate date);
+
+        @Query("""
+                            SELECT DISTINCT l
+                            FROM Lecon l
+                            JOIN FETCH l.affectation a
+                            WHERE a.classeId = :classeId
+                        """)
+        List<Lecon> findByClasseId(@Param("classeId") Long classeId);
 }

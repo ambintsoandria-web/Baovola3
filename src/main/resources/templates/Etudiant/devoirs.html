@@ -23,6 +23,8 @@
         </div>
 
         <div class="lecon-card" th:each="lecon : ${lecons}">
+             <h4 th:text="${lecon.affectation?.professeur?.prenom +''+lecon.affectation?.professeur?.nom}">Professeur</h4>
+            <h4 th:text="${lecon.affectation?.matiere?.nom}">Matiere</h4>
           <h4 th:text="${lecon.titre}">Titre leçon</h4>
           <div class="due">
             <span th:text="${lecon.contenu}">Contenu</span>

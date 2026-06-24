@@ -13,6 +13,9 @@ public class Devoir {
     private Long id;
 
     private String titre;
+    
+
+    
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "affectation_id")

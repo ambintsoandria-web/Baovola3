@@ -30,6 +30,8 @@ D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\Salle.java
 D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\Seance.java
 D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\User.java
 D:\Animation\Baovola3\src\main\java\com\ecole\entity\Etudiant\UserRole.java
+D:\Animation\Baovola3\src\main\java\com\ecole\repository\Etudiant\classeRepository.java
+D:\Animation\Baovola3\src\main\java\com\ecole\repository\Etudiant\CoefficientRepository.java
 D:\Animation\Baovola3\src\main\java\com\ecole\repository\Etudiant\DevoirRepository.java
 D:\Animation\Baovola3\src\main\java\com\ecole\repository\Etudiant\EmploiDuTempsRepository.java
 D:\Animation\Baovola3\src\main\java\com\ecole\repository\Etudiant\InscriptionRepository.java

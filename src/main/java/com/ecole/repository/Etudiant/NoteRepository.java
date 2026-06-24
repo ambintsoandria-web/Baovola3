@@ -19,4 +19,6 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
         ORDER BY n.dateSaisie DESC
     """)
     List<Note> findNotesParEtudiant(@Param("etudiantId") Long etudiantId);
+
+  
 }
