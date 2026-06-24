@@ -23,7 +23,13 @@
               <td th:text="${note.affectation?.professeur?.prenom + ' ' + note.affectation?.professeur?.nom}"></td>
               <td th:text="${note.valeur}"></td>
               <td th:text="${coefficientsMap[note.affectation.matiere.id]}"></td>
-              <td style="color:var(--success);font-size:13px;">Très bien ⭐</td>
+             <td th:text="${
+    note.valeur < 10 ? 'Insuffisant' :
+    note.valeur < 12 ? 'Augmentez vos efforts' :
+    note.valeur < 16 ? 'Bien' :
+    'Excellent ⭐'
+}">
+</td>
             </tr>
           </tbody>
         </table>

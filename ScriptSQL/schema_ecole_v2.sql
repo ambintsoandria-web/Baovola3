@@ -1045,3 +1045,6 @@ INSERT INTO categories_depenses (parent_id, nom, type_charge) VALUES
 -- FIN DU SCHÉMA
 -- Tables : 36  |  Index : 33  |  Sections : 17
 -- ============================================================
+
+
+Alter table note add COLUMN trimestre VARCHAR(250);

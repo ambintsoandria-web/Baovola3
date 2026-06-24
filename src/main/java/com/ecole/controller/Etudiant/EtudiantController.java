@@ -84,12 +84,13 @@ public class EtudiantController {
         Long etudiantId = profilEtudiant.getId();
 
         List<Note> notes = (etudiantId != null) ? noteRepository.findNotesParEtudiant(etudiantId) : List.of();
-        
+
         List<Inscription> inscriptions = inscriptionRepository.findActiveByEtudiant(etudiantId);
 
         Long classeId = inscriptions.get(0).getClasseId();
 
-        Classe classe = classeRepository.findById(classeId).orElseThrow(() -> new RuntimeException("Classe introuvable"));
+        Classe classe = classeRepository.findById(classeId)
+                .orElseThrow(() -> new RuntimeException("Classe introuvable"));
 
         Long niveau = classe.getNiveauId();
 
