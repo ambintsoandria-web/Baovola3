@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,9 +21,11 @@ import jakarta.servlet.http.HttpSession;
 public class LoginController {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public LoginController(UserRepository userRepository) {
+    public LoginController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/login")
@@ -42,14 +45,19 @@ public class LoginController {
             return "redirect:/login?error=true";
         }
 
-        User user = userRepository.findByEmailAndPassword(normalizedEmail, password);
+        // 1. Chercher l'utilisateur par email seulement
+        User user = userRepository.findByEmail(normalizedEmail);
 
-        if (user == null || Boolean.FALSE.equals(user.getIsActive())) {
+        // 2. Vérifier le mot de passe avec BCrypt
+        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+            return "redirect:/login?error=true";
+        }
+
+        if (Boolean.FALSE.equals(user.getIsActive())) {
             return "redirect:/login?error=true";
         }
 
         List<String> roles = userRepository.findRoleNamesByUserId(user.getId());
-
         if (roles.isEmpty()) {
             return "redirect:/login?error=role";
         }
@@ -79,21 +87,14 @@ public class LoginController {
                 .map(String::toLowerCase)
                 .collect(Collectors.toSet());
 
-        if (normalizedRoles.contains("super_admin") || normalizedRoles.contains("directeur")) {
+        if (normalizedRoles.contains("super_admin") || normalizedRoles.contains("directeur"))
             return "/directeur/dashboard";
-        }
-
-        if (normalizedRoles.contains("secretariat") || normalizedRoles.contains("comptable")) {
+        if (normalizedRoles.contains("secretariat") || normalizedRoles.contains("comptable"))
             return "/secretariat/paiement";
-        }
-
-        if (normalizedRoles.contains("professeur")) {
+        if (normalizedRoles.contains("professeur"))
             return "/professeur/emploi";
-        }
-
-        if (normalizedRoles.contains("etudiant")) {
+        if (normalizedRoles.contains("etudiant"))
             return "/etudiant/emploi";
-        }
 
         return "/login?error=role";
     }

@@ -460,7 +460,7 @@ CREATE TABLE notes (
     est_valide      BOOLEAN DEFAULT TRUE,
     -- Traçabilité des corrections (nécessite validation secrétariat)
     ancienne_valeur NUMERIC(5,2),                     -- valeur avant correction
-    corrige_par     INT REFERENCES users(id)s,
+    corrige_par     INT REFERENCES users(id),
     date_correction TIMESTAMP,
     motif_correction TEXT,
     created_at      TIMESTAMP DEFAULT NOW(),
@@ -937,6 +937,16 @@ CREATE TABLE lecons (
     date_publication DATE DEFAULT CURRENT_DATE,
     document_url     VARCHAR(500),
     created_at       TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE horaire_edt (
+    id SERIAL PRIMARY KEY,
+    libelle VARCHAR(50) NOT NULL,
+    heure_debut TIME NOT NULL,
+    heure_fin TIME NOT NULL,
+    ordre INT NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT NOW()
 );
 -- ============================================================
 -- SECTION 16 — INDEX DE PERFORMANCE
