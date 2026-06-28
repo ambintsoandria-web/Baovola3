@@ -19,6 +19,18 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
         ORDER BY n.dateSaisie DESC
     """)
     List<Note> findNotesParEtudiant(@Param("etudiantId") Long etudiantId);
+     
+@Query("""
+        SELECT n
+        FROM Note n
+        JOIN FETCH n.affectation a
+        JOIN FETCH a.matiere m
+        JOIN FETCH a.professeur p
+        WHERE n.etudiantId = :etudiantId
+        AND n.periodeId = :periodeId
+        """)
+     List<Note> findNotesParEtudiantParTrimestre(@Param("etudiantId") Long etudiantId ,@Param("periodeId") Long periodeId);
+        
 
   
 }

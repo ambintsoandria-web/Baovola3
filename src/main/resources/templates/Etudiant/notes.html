@@ -8,8 +8,17 @@
   <header class="topbar" th:replace="fragments/header :: topbar"></header>
   <main class="main-content">
     <div class="page-header">
-        <div><h2>Mes Notes</h2><p>Trimestre 2 — 2025/2026</p></div>
-        <select class="form-control" style="width:auto;padding:8px 12px;"><option>Trimestre 2</option><option>Trimestre 1</option></select>
+      <form th:action="@{/etudiant/notes}">
+          <label for="trimestre">Trimestre:</label>
+          <select id="trimestre" name="trimestre">
+                <option th:each="periodes : ${periode}"
+                        th:value="${periodes.id}"
+                        th:text="${periodes.libelle}">
+               </option>
+          </select>
+          <button type="submit">Valider</button>
+        </form>   
+        
     </div>
   
     <div class="card">
@@ -22,7 +31,7 @@
               <td th:text="${note.affectation?.matiere?.nom}"></td>
               <td th:text="${note.affectation?.professeur?.prenom + ' ' + note.affectation?.professeur?.nom}"></td>
               <td th:text="${note.valeur}"></td>
-              <td th:text="${coefficientsMap[note.affectation.matiere.id]}"></td>
+              <td th:text="${coefficientsMap[note.affectation?.matiere?.id]}"></td>
              <td th:text="${
     note.valeur < 10 ? 'Insuffisant' :
     note.valeur < 12 ? 'Augmentez vos efforts' :

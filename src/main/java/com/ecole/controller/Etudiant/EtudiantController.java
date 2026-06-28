@@ -7,6 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ecole.entity.Etudiant.Classe;
 import com.ecole.entity.Etudiant.Coefficient;
@@ -16,6 +21,7 @@ import com.ecole.entity.Etudiant.Lecon;
 import com.ecole.entity.Etudiant.Note;
 import com.ecole.entity.Etudiant.ProfilEtudiant;
 import com.ecole.entity.Etudiant.User;
+import com.ecole.entity.Etudiant.Periode;
 import com.ecole.repository.Etudiant.CoefficientRepository;
 import com.ecole.repository.Etudiant.DevoirRepository;
 import com.ecole.repository.Etudiant.InscriptionRepository;
@@ -23,6 +29,7 @@ import com.ecole.repository.Etudiant.LeconRepository;
 import com.ecole.repository.Etudiant.NoteRepository;
 import com.ecole.repository.Etudiant.UserRepository;
 import com.ecole.repository.Etudiant.classeRepository;
+import com.ecole.repository.Etudiant.PeriodeRepository;
 import com.ecole.service.Etudiant.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -54,6 +61,8 @@ public class EtudiantController {
     @Autowired
     public CoefficientRepository coefficientRepository;
 
+    @Autowired
+    public PeriodeRepository periodeRepository;
     @GetMapping("/etudiant/emploi")
     public String emploi(Model model, HttpSession session) {
 
@@ -73,17 +82,21 @@ public class EtudiantController {
     }
 
     @GetMapping("/etudiant/notes")
-    public String notes(Model model, HttpSession session) {
+    public String notes(@RequestParam(required = false) Long trimestre, Model model, HttpSession session) {
         User userLoggedIn = userService.getCurrentUser(session);
         ProfilEtudiant profilEtudiant = userService.getCurrentProfil(session);
 
         if (userLoggedIn == null) {
             return "redirect:/login";
         }
-
         Long etudiantId = profilEtudiant.getId();
 
-        List<Note> notes = (etudiantId != null) ? noteRepository.findNotesParEtudiant(etudiantId) : List.of();
+        List<Note> notes;
+        if (trimestre != null && etudiantId != null) {
+            notes = noteRepository.findNotesParEtudiantParTrimestre(etudiantId, trimestre);
+        } else {
+            notes = (etudiantId != null) ? noteRepository.findNotesParEtudiant(etudiantId) : List.of();
+        }
 
         List<Inscription> inscriptions = inscriptionRepository.findActiveByEtudiant(etudiantId);
 
@@ -95,15 +108,21 @@ public class EtudiantController {
         Long niveau = classe.getNiveauId();
 
         Map<Long, java.math.BigDecimal> coefficientsMap = coefficientRepository.findCoefficientsMapByNiveau(niveau);
+        
+        List<Periode> periode = periodeRepository.findAll();
+    Long tap =null;
+    
+        
         model.addAttribute("pageTitle", "Mes Notes");
         model.addAttribute("currentRole", "etudiant");
         model.addAttribute("user", userLoggedIn);
         model.addAttribute("profilEtudiant", profilEtudiant);
         model.addAttribute("notes", notes);
         model.addAttribute("coefficientsMap", coefficientsMap);
+        model.addAttribute("periode",periode);
         return "Etudiant/notes";
     }
-
+    
     @GetMapping("/etudiant/devoirs")
     public String devoirs(Model model, HttpSession session) {
         User userLoggedIn = userService.getCurrentUser(session);

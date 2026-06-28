@@ -37,5 +37,6 @@ D:\Animation\Baovola3\src\main\java\com\ecole\repository\Etudiant\EmploiDuTempsR
 D:\Animation\Baovola3\src\main\java\com\ecole\repository\Etudiant\InscriptionRepository.java
 D:\Animation\Baovola3\src\main\java\com\ecole\repository\Etudiant\LeconRepository.java
 D:\Animation\Baovola3\src\main\java\com\ecole\repository\Etudiant\NoteRepository.java
+D:\Animation\Baovola3\src\main\java\com\ecole\repository\Etudiant\PeriodeRepository.java
 D:\Animation\Baovola3\src\main\java\com\ecole\repository\Etudiant\UserRepository.java
 D:\Animation\Baovola3\src\main\java\com\ecole\service\Etudiant\UserService.java
