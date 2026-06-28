@@ -12,11 +12,13 @@ public class AffectationEnseignement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "professeur_id")
-    private Long professeurId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "professeur_id")
+    private ProfilProfesseur professeur;
 
-    @Column(name = "matiere_id")
-    private Long matiereId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "matiere_id")
+    private Matiere matiere;
 
     @Column(name = "classe_id")
     private Long classeId;
@@ -38,20 +40,37 @@ public class AffectationEnseignement {
         this.id = id;
     }
 
-    public Long getProfesseurId() {
-        return professeurId;
+    public ProfilProfesseur getProfesseur() {
+        return professeur;
     }
 
-    public void setProfesseurId(Long professeurId) {
-        this.professeurId = professeurId;
+    public void setProfesseur(ProfilProfesseur professeur) {
+        this.professeur = professeur;
     }
 
-    public Long getMatiereId() {
-        return matiereId;
+    public Matiere getMatiere() {
+        return matiere;
     }
 
-    public void setMatiereId(Long matiereId) {
-        this.matiereId = matiereId;
+    public void setMatiere(Matiere matiere) {
+        this.matiere = matiere;
+    }
+
+    // Méthodes pour compatibilité avec l'ancien nom (professeurId/matiereId)
+    public ProfilProfesseur getProfesseurId() {
+        return professeur;
+    }
+
+    public void setProfesseurId(ProfilProfesseur professeur) {
+        this.professeur = professeur;
+    }
+
+    public Matiere getMatiereId() {
+        return matiere;
+    }
+
+    public void setMatiereId(Matiere matiere) {
+        this.matiere = matiere;
     }
 
     public Long getClasseId() {
