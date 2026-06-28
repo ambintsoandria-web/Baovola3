@@ -63,27 +63,22 @@ public class EtudiantController {
             return "redirect:/login";
         }
 
-        // Récupérer toutes les années scolaires de l'étudiant
         List<AnneeScolaire> anneesScolaires = anneeScolaireRepository.getAnneesScolairesByEtudiant(
                 userLoggedIn.getId().intValue());
 
-        // Si aucune année sélectionnée, prendre la première
         if (anneeScolaireId == null && !anneesScolaires.isEmpty()) {
             anneeScolaireId = anneesScolaires.get(0).getId().intValue();
         }
 
-        // Récupérer les périodes pour l'année sélectionnée
         List<Periode> periodes = new ArrayList<>();
         if (anneeScolaireId != null) {
             periodes = periodeRepository.findByAnneeScolaireId(anneeScolaireId.longValue());
         }
 
-        // Si aucune période sélectionnée, prendre la première
         if (periodeId == null && !periodes.isEmpty()) {
             periodeId = periodes.get(0).getId().intValue();
         }
 
-        // Récupérer l'emploi du temps
         Integer salleId = userService.getSalleEtudiant(userLoggedIn.getId().intValue());
 
         List<EmploiDuTemps> emploiDuTemps = new ArrayList<>();
