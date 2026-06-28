@@ -31,5 +31,6 @@
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/repository/Etudiant/EmploiDuTempsRepository.java
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/repository/Etudiant/HoraireEdtRepository.java
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/repository/Etudiant/MatiereRepository.java
+/home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/repository/Etudiant/PeriodeRepository.java
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/repository/Etudiant/UserRepository.java
 /home/main/Documents/GitHub/Baovola3/src/main/java/com/ecole/service/Etudiant/UserService.java
