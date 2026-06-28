@@ -24,9 +24,11 @@ import com.ecole.entity.Etudiant.Periode;
 import com.ecole.repository.Etudiant.AnneeScolaireRepository;
 import com.ecole.repository.Etudiant.EmploiDuTempsRepository;
 import com.ecole.repository.Etudiant.HoraireEdtRepository;
+import com.ecole.repository.Etudiant.NoteRepository;
 import com.ecole.repository.Etudiant.PeriodeRepository;
 import com.ecole.repository.Etudiant.UserRepository;
 import com.ecole.service.Etudiant.UserService;
+
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -49,6 +51,9 @@ public class EtudiantController {
 
     @Autowired
     public PeriodeRepository periodeRepository;
+
+    @Autowired
+    public NoteRepository noteRepository;
 
     private final List<String> JOURS = Arrays.asList("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi");
 
@@ -142,7 +147,7 @@ public class EtudiantController {
         return "Etudiant/calendar";
     }
 
-        @GetMapping("/etudiant/notes")
+    @GetMapping("/etudiant/notes")
     public String notes(@RequestParam(required = false) Long trimestre, Model model, HttpSession session) {
         User userLoggedIn = userService.getCurrentUser(session);
         ProfilEtudiant profilEtudiant = userService.getCurrentProfil(session);
@@ -169,21 +174,20 @@ public class EtudiantController {
         Long niveau = classe.getNiveauId();
 
         Map<Long, java.math.BigDecimal> coefficientsMap = coefficientRepository.findCoefficientsMapByNiveau(niveau);
-        
+
         List<Periode> periode = periodeRepository.findAll();
-    Long tap =null;
-    
-        
+        Long tap = null;
+
         model.addAttribute("pageTitle", "Mes Notes");
         model.addAttribute("currentRole", "etudiant");
         model.addAttribute("user", userLoggedIn);
         model.addAttribute("profilEtudiant", profilEtudiant);
         model.addAttribute("notes", notes);
         model.addAttribute("coefficientsMap", coefficientsMap);
-        model.addAttribute("periode",periode);
+        model.addAttribute("periode", periode);
         return "Etudiant/notes";
     }
-    
+
     @GetMapping("/etudiant/devoirs")
     public String devoirs(Model model, HttpSession session) {
         User userLoggedIn = userService.getCurrentUser(session);
