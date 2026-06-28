@@ -24,6 +24,7 @@ import com.ecole.entity.Etudiant.Periode;
 import com.ecole.repository.Etudiant.AnneeScolaireRepository;
 import com.ecole.repository.Etudiant.EmploiDuTempsRepository;
 import com.ecole.repository.Etudiant.HoraireEdtRepository;
+import com.ecole.repository.Etudiant.InscriptionRepository;
 import com.ecole.repository.Etudiant.NoteRepository;
 import com.ecole.repository.Etudiant.PeriodeRepository;
 import com.ecole.repository.Etudiant.UserRepository;
