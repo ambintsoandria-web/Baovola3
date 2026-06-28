@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ecole.entity.Etudiant.AnneeScolaire;
+import com.ecole.entity.Etudiant.Classe;
 import com.ecole.entity.Etudiant.EmploiDuTemps;
 import com.ecole.entity.Etudiant.ProfilEtudiant;
 import com.ecole.entity.Etudiant.User;
 import com.ecole.entity.Etudiant.HoraireEdt;
+import com.ecole.entity.Etudiant.Inscription;
+import com.ecole.entity.Etudiant.Note;
 import com.ecole.entity.Etudiant.Periode;
 import com.ecole.repository.Etudiant.AnneeScolaireRepository;
 import com.ecole.repository.Etudiant.EmploiDuTempsRepository;
@@ -139,23 +142,48 @@ public class EtudiantController {
         return "Etudiant/calendar";
     }
 
-    @GetMapping("/etudiant/notes")
-    public String notes(Model model, HttpSession session) {
+        @GetMapping("/etudiant/notes")
+    public String notes(@RequestParam(required = false) Long trimestre, Model model, HttpSession session) {
         User userLoggedIn = userService.getCurrentUser(session);
         ProfilEtudiant profilEtudiant = userService.getCurrentProfil(session);
 
         if (userLoggedIn == null) {
             return "redirect:/login";
         }
+        Long etudiantId = profilEtudiant.getId();
 
+        List<Note> notes;
+        if (trimestre != null && etudiantId != null) {
+            notes = noteRepository.findNotesParEtudiantParTrimestre(etudiantId, trimestre);
+        } else {
+            notes = (etudiantId != null) ? noteRepository.findNotesParEtudiant(etudiantId) : List.of();
+        }
+
+        List<Inscription> inscriptions = inscriptionRepository.findActiveByEtudiant(etudiantId);
+
+        Long classeId = inscriptions.get(0).getClasseId();
+
+        Classe classe = classeRepository.findById(classeId)
+                .orElseThrow(() -> new RuntimeException("Classe introuvable"));
+
+        Long niveau = classe.getNiveauId();
+
+        Map<Long, java.math.BigDecimal> coefficientsMap = coefficientRepository.findCoefficientsMapByNiveau(niveau);
+        
+        List<Periode> periode = periodeRepository.findAll();
+    Long tap =null;
+    
+        
         model.addAttribute("pageTitle", "Mes Notes");
         model.addAttribute("currentRole", "etudiant");
         model.addAttribute("user", userLoggedIn);
         model.addAttribute("profilEtudiant", profilEtudiant);
-
+        model.addAttribute("notes", notes);
+        model.addAttribute("coefficientsMap", coefficientsMap);
+        model.addAttribute("periode",periode);
         return "Etudiant/notes";
     }
-
+    
     @GetMapping("/etudiant/devoirs")
     public String devoirs(Model model, HttpSession session) {
         User userLoggedIn = userService.getCurrentUser(session);
@@ -165,11 +193,25 @@ public class EtudiantController {
             return "redirect:/login";
         }
 
-        model.addAttribute("pageTitle", "Devoirs & Leçons");
+        List<Inscription> inscriptions = inscriptionRepository.findActiveByEtudiant(profilEtudiant.getUserId());
+
+        Long classeId = null;
+        if (!inscriptions.isEmpty()) {
+            classeId = inscriptions.get(0).getClasseId();
+        }
+
+        List<Devoir> devoirs = (classeId != null)
+                ? devoirRepository.findByClasse(classeId)
+                : List.of();
+
+        List<Lecon> lecons = leconRepository.findByClasseId(classeId);
+
+        model.addAttribute("pageTitle", "Devoirs");
         model.addAttribute("currentRole", "etudiant");
         model.addAttribute("user", userLoggedIn);
         model.addAttribute("profilEtudiant", profilEtudiant);
-
+        model.addAttribute("devoirs", devoirs);
+        model.addAttribute("lecons", lecons);
         return "Etudiant/devoirs";
     }
 
@@ -188,5 +230,22 @@ public class EtudiantController {
         model.addAttribute("profilEtudiant", profilEtudiant);
 
         return "Etudiant/bulletin";
+    }
+
+    @GetMapping("/etudiant/profil")
+    public String profil(Model model, HttpSession session) {
+        User userLoggedIn = userService.getCurrentUser(session);
+        ProfilEtudiant profilEtudiant = userService.getCurrentProfil(session);
+
+        if (userLoggedIn == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("pageTitle", "Mon Profil");
+        model.addAttribute("currentRole", "etudiant");
+        model.addAttribute("user", userLoggedIn);
+        model.addAttribute("profilEtudiant", profilEtudiant);
+
+        return "Etudiant/profil";
     }
 }
