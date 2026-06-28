@@ -55,6 +55,9 @@ public class EtudiantController {
     @Autowired
     public NoteRepository noteRepository;
 
+    @Autowired
+    public InscriptionRepository inscriptionRepository;
+
     private final List<String> JOURS = Arrays.asList("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi");
 
     @GetMapping("/etudiant/emploi")
