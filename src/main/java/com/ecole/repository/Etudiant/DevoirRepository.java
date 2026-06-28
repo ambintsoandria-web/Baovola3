@@ -20,18 +20,7 @@ public interface DevoirRepository extends JpaRepository<Devoir, Long> {
 
     List<Devoir> findByAffectationAndEstActif(AffectationEnseignement affectation, Boolean estActif);
 
-
-
-    @Query("""
-                SELECT DISTINCT d
-                FROM Devoir d
-                JOIN FETCH d.affectation a
-                JOIN FETCH a.professeur p
-                JOIN FETCH a.matiere m
-                WHERE a.classeId = :classeId
-                AND d.estActif = true
-                ORDER BY d.datePublication DESC
-            """)
+    // ✅ CORRIGÉ : "statut" → "estActif"
+    @Query("SELECT DISTINCT d FROM Devoir d JOIN FETCH d.affectation a JOIN FETCH a.professeur p JOIN FETCH a.matiere m WHERE a.classeId = :classeId AND d.estActif = true ORDER BY d.datePublication DESC")
     List<Devoir> findByClasse(@Param("classeId") Long classeId);
-
 }

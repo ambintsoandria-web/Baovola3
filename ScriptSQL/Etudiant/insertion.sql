@@ -233,3 +233,13 @@ ALTER TABLE emploi_du_temps ADD COLUMN periode_id INT;
 SELECT annee_scolaire_id FROM inscriptions WHERE etudiant_id = 1 ORDER BY date_inscription DESC LIMIT 1;
 
 SELECT * FROM annees_scolaires JOIN inscriptions ON annees_scolaires.id = inscriptions.annee_scolaire_id WHERE etudiant_id = 1;
+
+CREATE TABLE lecons (
+    id SERIAL PRIMARY KEY,
+    affectation_id INTEGER REFERENCES affectations_enseignement(id),
+    titre VARCHAR(255),
+    contenu TEXT,
+    document_url VARCHAR(500),
+    date_publication DATE,
+    created_at TIMESTAMP DEFAULT NOW()
+);
