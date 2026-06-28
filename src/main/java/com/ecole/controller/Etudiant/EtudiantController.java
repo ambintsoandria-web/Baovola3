@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,20 +15,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ecole.entity.Etudiant.AnneeScolaire;
 import com.ecole.entity.Etudiant.Classe;
+import com.ecole.entity.Etudiant.Devoir;
 import com.ecole.entity.Etudiant.EmploiDuTemps;
 import com.ecole.entity.Etudiant.ProfilEtudiant;
 import com.ecole.entity.Etudiant.User;
 import com.ecole.entity.Etudiant.HoraireEdt;
 import com.ecole.entity.Etudiant.Inscription;
+import com.ecole.entity.Etudiant.Lecon;
 import com.ecole.entity.Etudiant.Note;
 import com.ecole.entity.Etudiant.Periode;
 import com.ecole.repository.Etudiant.AnneeScolaireRepository;
+import com.ecole.repository.Etudiant.CoefficientRepository;
+import com.ecole.repository.Etudiant.DevoirRepository;
 import com.ecole.repository.Etudiant.EmploiDuTempsRepository;
 import com.ecole.repository.Etudiant.HoraireEdtRepository;
 import com.ecole.repository.Etudiant.InscriptionRepository;
+import com.ecole.repository.Etudiant.LeconRepository;
 import com.ecole.repository.Etudiant.NoteRepository;
 import com.ecole.repository.Etudiant.PeriodeRepository;
 import com.ecole.repository.Etudiant.UserRepository;
+import com.ecole.repository.Etudiant.classeRepository;
 import com.ecole.service.Etudiant.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -58,6 +65,18 @@ public class EtudiantController {
 
     @Autowired
     public InscriptionRepository inscriptionRepository;
+
+    @Autowired
+    public classeRepository classeRepository;
+
+    @Autowired
+    public CoefficientRepository coefficientRepository;
+
+    @Autowired
+    public DevoirRepository devoirRepository;
+
+    @Autowired
+    public LeconRepository leconRepository;
 
     private final List<String> JOURS = Arrays.asList("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi");
 
