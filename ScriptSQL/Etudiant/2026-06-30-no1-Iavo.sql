@@ -22,4 +22,4 @@ CREATE TABLE lecons (
     created_at       TIMESTAMP DEFAULT NOW()
 );
 
-Alter table note add COLUMN trimestre VARCHAR(250);
+Alter table notes add COLUMN trimestre VARCHAR(250);
