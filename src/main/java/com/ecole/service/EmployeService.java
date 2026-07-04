@@ -91,8 +91,7 @@ public class EmployeService {
         }
     }
 
-    public List<VueEmployesDetail> filterEmployes(String keyword, String roleNom, Long matiereId, BigDecimal salaireMin,
-            BigDecimal salaireMax) {
+    public List<VueEmployesDetail> filterEmployes(String keyword, String roleNom, Long matiereId, BigDecimal salaireMin, BigDecimal salaireMax) {
         try {
             return vueEmployesDetailRepository.filterEmployes(keyword, roleNom, matiereId, salaireMin, salaireMax);
         } catch (Exception e) {
@@ -114,11 +113,11 @@ public class EmployeService {
         if (employe.getDateFin() == null) {
             return "Contrat sans date de fin";
         }
-
+        
         LocalDate today = LocalDate.now();
         LocalDate endDate = employe.getDateFin();
         long daysRemaining = ChronoUnit.DAYS.between(today, endDate);
-
+        
         if (daysRemaining > 0) {
             return daysRemaining + " jour(s) restants";
         } else {
@@ -133,7 +132,7 @@ public class EmployeService {
             }
             return "/photo/photo-employes/" + employe.getPhotoUrl();
         }
-
+        
         String sexe = employe.getSexe() != null ? employe.getSexe().toUpperCase() : "H";
         return sexe.equals("F") ? "/photo/DefaultIMG_Femme.png" : "/photo/DefaultIMG_Homme.png";
     }
@@ -148,9 +147,9 @@ public class EmployeService {
         }
 
         String contentType = file.getContentType();
-        if (contentType == null || (!contentType.startsWith("image/") &&
-                !contentType.equals("image/jpeg") && !contentType.equals("image/png") &&
-                !contentType.equals("image/webp"))) {
+        if (contentType == null || (!contentType.startsWith("image/") && 
+            !contentType.equals("image/jpeg") && !contentType.equals("image/png") && 
+            !contentType.equals("image/webp"))) {
             throw new IllegalArgumentException("Le fichier doit être une image (jpg, png, webp)");
         }
 
@@ -171,13 +170,13 @@ public class EmployeService {
         Files.copy(file.getInputStream(), filePath);
 
         String photoFilename = filename;
-
+        
         // Update photo URL in the appropriate profile table
         Optional<VueEmployesDetail> employeOpt = getEmployeById(userId);
         if (employeOpt.isPresent()) {
             VueEmployesDetail employe = employeOpt.get();
             String roleNom = employe.getRoleNom();
-
+            
             // Delete old photo if exists
             String oldPhotoFilename = employe.getPhotoUrl();
             if (oldPhotoFilename != null && !oldPhotoFilename.isEmpty() && !oldPhotoFilename.contains("DefaultIMG")) {
@@ -190,7 +189,7 @@ public class EmployeService {
                     log.error("Error deleting old photo file: {}", e.getMessage());
                 }
             }
-
+            
             // Update database based on role
             if ("professeur".equals(roleNom)) {
                 profilsProfesseursRepository.findByUserId(userId).ifPresent(profile -> {
@@ -214,7 +213,7 @@ public class EmployeService {
                 });
             }
         }
-
+        
         return photoFilename;
     }
 
@@ -224,10 +223,10 @@ public class EmployeService {
             VueEmployesDetail employe = employeOpt.get();
             String currentPhotoFilename = employe.getPhotoUrl();
             String roleNom = employe.getRoleNom();
-
+            
             // Delete photo file if exists
-            if (currentPhotoFilename != null && !currentPhotoFilename.isEmpty() &&
-                    !currentPhotoFilename.contains("DefaultIMG")) {
+            if (currentPhotoFilename != null && !currentPhotoFilename.isEmpty() && 
+                !currentPhotoFilename.contains("DefaultIMG")) {
                 try {
                     Path filePath = Paths.get(PHOTO_DIR + "/" + currentPhotoFilename);
                     if (Files.exists(filePath)) {
@@ -237,7 +236,7 @@ public class EmployeService {
                     log.error("Error deleting photo file: {}", e.getMessage());
                 }
             }
-
+            
             // Update database to set photo URL to null based on role
             if ("professeur".equals(roleNom)) {
                 profilsProfesseursRepository.findByUserId(userId).ifPresent(profile -> {
@@ -269,7 +268,7 @@ public class EmployeService {
 
     public Map<String, Object> validateAndCheckPhone(String telephone) {
         Map<String, Object> result = new HashMap<>();
-
+        
         if (telephone == null || telephone.trim().isEmpty()) {
             result.put("valid", true);
             result.put("exists", false);
@@ -283,8 +282,7 @@ public class EmployeService {
             result.put("valid", false);
             result.put("exists", false);
             result.put("normalized", "");
-            result.put("message",
-                    "Numéro invalide. Utilisez un numéro malgache commençant par +261, 0, 032, 033, 034, 037 ou 038.");
+            result.put("message", "Numéro invalide. Utilisez un numéro malgache commençant par +261, 0, 032, 033, 034, 037 ou 038.");
             return result;
         }
 
@@ -306,7 +304,7 @@ public class EmployeService {
 
     public Map<String, Object> validatePassword(String password) {
         Map<String, Object> result = new HashMap<>();
-
+        
         if (password == null || password.trim().isEmpty()) {
             result.put("valid", false);
             result.put("message", "Le mot de passe est requis.");
@@ -321,8 +319,7 @@ public class EmployeService {
 
         if (!password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*")) {
             result.put("valid", false);
-            result.put("message",
-                    "Le mot de passe doit contenir au moins un caractère spécial (!@#$%^&*()_+-=[]{};':\"\\|,.<>/?)");
+            result.put("message", "Le mot de passe doit contenir au moins un caractère spécial (!@#$%^&*()_+-=[]{};':\"\\|,.<>/?)");
             return result;
         }
 
@@ -336,34 +333,34 @@ public class EmployeService {
         if (digits == null || digits.isEmpty()) {
             return null;
         }
-
+        
         // Handle +261 prefix (12 digits: 261 + 10 digit number)
         if (digits.length() == 12 && digits.startsWith("261")) {
             digits = digits.substring(2); // Remove 261
         }
-
+        
         // Handle 0 prefix (10 digits: 0 + 9 digit number)
         if (digits.length() == 10 && digits.startsWith("0")) {
             digits = digits.substring(1); // Remove leading 0
         }
-
+        
         // Now handle standard formats
         if (digits.length() == 10 && digits.startsWith("03")) {
             String prefix = digits.substring(0, 2);
-            if (prefix.equals("032") || prefix.equals("033") || prefix.equals("034") ||
-                    prefix.equals("037") || prefix.equals("038")) {
+            if (prefix.equals("032") || prefix.equals("033") || prefix.equals("034") || 
+                prefix.equals("037") || prefix.equals("038")) {
                 return digits;
             }
         }
-
+        
         if (digits.length() == 9 && digits.startsWith("3")) {
             String prefix = digits.substring(0, 1);
-            if (prefix.equals("2") || prefix.equals("3") || prefix.equals("4") ||
-                    prefix.equals("7") || prefix.equals("8")) {
+            if (prefix.equals("2") || prefix.equals("3") || prefix.equals("4") || 
+                prefix.equals("7") || prefix.equals("8")) {
                 return "03" + digits;
             }
         }
-
+        
         return null;
     }
 
@@ -400,7 +397,7 @@ public class EmployeService {
             String telephone, String password, String adresse, Long typeContratId, BigDecimal salaireMensuel,
             LocalDate dateDebut, LocalDate dateFin, Long matiereId, BigDecimal heuresHebdo,
             String specialite, MultipartFile photo) throws IOException {
-
+        
         if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("Cet email est déjà utilisé");
         }
@@ -417,7 +414,7 @@ public class EmployeService {
         }
 
         String defaultPassword = (password != null && !password.trim().isEmpty()) ? password : "ChangeMe123!";
-
+        
         User user = new User();
         user.setEmail(email);
         user.setPassword(defaultPassword);
@@ -462,7 +459,7 @@ public class EmployeService {
 
         // Assign the role in user_roles table
         Role role = roleRepository.findByNom(fonction.toLowerCase())
-                .orElseThrow(() -> new IllegalArgumentException("Fonction non reconnue: " + fonction));
+            .orElseThrow(() -> new IllegalArgumentException("Fonction non reconnue: " + fonction));
         UserRole userRole = new UserRole();
         userRole.setId(new UserRoleId(user.getId(), role.getId()));
         userRole.setUser(user);

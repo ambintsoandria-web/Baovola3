@@ -134,9 +134,19 @@ public class PaiementService {
         // =================================== //
 
         public BilanGlobalDTO getBilanGlobal() {
-                AnneeScolaire annee = getAnneeActive();
+                AnneeScolaire annee;
+                try {
+                        annee = getAnneeActive();
+                } catch (RuntimeException e) {
+                        return new BilanGlobalDTO(BigDecimal.ZERO, BigDecimal.ZERO, new ArrayList<>());
+                }
+
                 List<Inscription> inscriptions = inscriptionRepository
                                 .findByAnneeScolaireAndStatut(annee, "active");
+
+                if (inscriptions.isEmpty()) {
+                        return new BilanGlobalDTO(BigDecimal.ZERO, BigDecimal.ZERO, new ArrayList<>());
+                }
 
                 // Regrouper par classe
                 Map<String, List<Inscription>> parClasse = new java.util.LinkedHashMap<>();
