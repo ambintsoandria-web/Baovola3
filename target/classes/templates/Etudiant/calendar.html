@@ -1,88 +1,43 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
-
 <head th:replace="fragments/header :: head"></head>
-
 <body>
-  <canvas id="particle-canvas"></canvas>
-  <div class="app-shell">
-    <aside class="sidebar" id="sidebar" th:replace="fragments/header :: sidebar"></aside>
-    <header class="topbar" th:replace="fragments/header :: topbar"></header>
-    <main class="main-content">
-      <div class="page-header">
+<canvas id="particle-canvas"></canvas>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar" th:replace="fragments/header :: sidebar"></aside>
+  <header class="topbar" th:replace="fragments/header :: topbar"></header>
+  <main class="main-content">
+    <div class="page-header">
         <div>
           <h2>Mon Emploi du Temps</h2>
-          <p th:text="${profilEtudiant != null ? profilEtudiant.prenom + ' ' + profilEtudiant.nom : ''}"></p>
+          <p th:text="${semaineLabel + (classe != null ? ' — ' + classe.nom : '')}">Semaine</p>
         </div>
       </div>
-
-      <!-- FILTRES : Année scolaire et Période -->
-      <div class="filters" style="display:flex; gap:15px; margin-bottom:20px; flex-wrap:wrap;">
-        <!-- Sélecteur Année Scolaire -->
-        <div>
-          <label style="font-weight:600;">Année scolaire :</label>
-          <select th:name="anneeScolaireId" style="padding:8px 12px; border-radius:8px; border:1px solid #ddd;">
-            <option th:each="annee : ${anneesScolaires}" th:value="${annee.id}" th:text="${annee.libelle}"
-              th:selected="${annee.id == anneeScolaireId}">
-            </option>
-          </select>
-        </div>
-
-        <!-- Sélecteur Période -->
-        <div>
-          <label style="font-weight:600;">Période :</label>
-          <select th:name="periodeId" style="padding:8px 12px; border-radius:8px; border:1px solid #ddd;">
-            <option th:each="periode : ${periodes}" th:value="${periode.id}" th:text="${periode.libelle}"
-              th:selected="${periode.id == periodeId}">
-            </option>
-          </select>
-        </div>
-
-        <!-- Bouton Filtrer -->
-        <button onclick="filterEmploi()"
-          style="padding:8px 20px; background:var(--g); color:white; border:none; border-radius:8px; cursor:pointer;">
-          Filtrer
-        </button>
-      </div>
-
       <div class="card">
         <div class="card-body" style="padding:var(--sp-md);">
-          <div class="schedule-grid">
-            <!-- En-tête -->
+          <div th:if="${grille == null or #lists.isEmpty(grille)}" class="empty-state">
+            <p>Aucun emploi du temps n'est encore disponible pour ta classe.</p>
+          </div>
+          <div th:if="${grille != null and !#lists.isEmpty(grille)}" class="schedule-grid"
+               th:style="'grid-template-columns: 90px repeat(' + ${#lists.size(jours)} + ', 1fr);'">
             <div class="schedule-header">Heure</div>
-            <div class="schedule-header" th:each="jour : ${jours}" th:text="${jour}"></div>
+            <div class="schedule-header" th:each="jour : ${jours}" th:text="${jour.nom}">Jour</div>
 
-            <!-- Lignes pour chaque horaire -->
-            <div th:each="horaire : ${horaires}" th:remove="tag">
-              <div class="schedule-cell schedule-time" th:text="${horaire.libelle}"></div>
-
-              <div th:each="jourIndex : ${#numbers.sequence(0, 4)}" class="schedule-cell">
-                <div th:each="cours : ${emploiDuTemps}"
-                  th:if="${cours != null and cours.jourSemaine == jourIndex + 1 and cours.heureDebut == horaire.heureDebut}"
-                  class="schedule-class">
-                  <span th:text="${cours.matiereNom}"></span>
-                  <small th:text="${cours.professeurComplet}"></small>
+            <th:block th:each="ligne : ${grille}">
+              <div class="schedule-cell schedule-time" th:text="${ligne.label}">Heure</div>
+              <div class="schedule-cell" th:each="jour : ${jours}">
+                <div th:if="${ligne.cases[jour.numero] != null}"
+                     th:class="'schedule-class ' + ${ligne.cases[jour.numero].couleur}">
+                  <span th:text="${ligne.cases[jour.numero].matiere}">Matière</span>
+                  <small th:text="${ligne.cases[jour.numero].professeur}">Professeur</small>
                 </div>
               </div>
-            </div>
+            </th:block>
           </div>
         </div>
       </div>
-    </main>
-  </div>
-  <div th:replace="~{fragments/footer :: footer}"></div>
-
-  <script>
-    function filterEmploi() {
-      var anneeId = document.querySelector('select[name="anneeScolaireId"]').value;
-      var periodeId = document.querySelector('select[name="periodeId"]').value;
-      window.location.href = '/etudiant/emploi?anneeScolaireId=' + anneeId + '&periodeId=' + periodeId;
-    }
-
-    // Auto-submit quand on change de sélection
-    document.querySelector('select[name="anneeScolaireId"]').addEventListener('change', filterEmploi);
-    document.querySelector('select[name="periodeId"]').addEventListener('change', filterEmploi);
-  </script>
+  </main>
+</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
-
 </html>
