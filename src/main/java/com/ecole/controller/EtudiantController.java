@@ -27,7 +27,6 @@ import com.ecole.entity.Periode;
 import com.ecole.entity.ProfilEtudiant;
 import com.ecole.entity.User;
 import com.ecole.entity.EmploiDuTemps;
-import com.ecole.entity.Absence;
 import com.ecole.repository.CoefficientRepository;
 import com.ecole.repository.DevoirRepository;
 import com.ecole.repository.InscriptionRepository;
@@ -35,141 +34,42 @@ import com.ecole.repository.LeconRepository;
 import com.ecole.repository.NoteRepository;
 import com.ecole.repository.PeriodeRepository;
 import com.ecole.repository.UserRepository;
-import com.ecole.repository.AbsenceRepository;
 import com.ecole.repository.ClasseRepository;
-import com.ecole.repository.SeanceRepository;
 import com.ecole.service.UserService;
 import com.ecole.service.ProfilEtudiantService;
 import com.ecole.repository.EmploiDuTempsRepository;
-import com.ecole.entity.AffectationEnseignement;
-import com.ecole.entity.Seance;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class EtudiantController {
 
-    @Autowired
-    public UserRepository userRepository;
-    @Autowired
-    public UserService userService;
-    @Autowired
-    public DevoirRepository devoirRepository;
-    @Autowired
-    public InscriptionRepository inscriptionRepository;
-    @Autowired
-    public LeconRepository leconRepository;
-    @Autowired
-    public NoteRepository noteRepository;
-    @Autowired
-    public ClasseRepository classeRepository;
-    @Autowired
-    public CoefficientRepository coefficientRepository;
-    @Autowired
-    public PeriodeRepository periodeRepository;
-    @Autowired
-    public ProfilEtudiantService profilEtudiantService;
-    @Autowired
-    public EmploiDuTempsRepository emploiDuTempsRepository;
+    @Autowired public UserRepository userRepository;
+    @Autowired public UserService userService;
+    @Autowired public DevoirRepository devoirRepository;
+    @Autowired public InscriptionRepository inscriptionRepository;
+    @Autowired public LeconRepository leconRepository;
+    @Autowired public NoteRepository noteRepository;
+    @Autowired public ClasseRepository classeRepository;
+    @Autowired public CoefficientRepository coefficientRepository;
+    @Autowired public PeriodeRepository periodeRepository;  
+    @Autowired public ProfilEtudiantService profilEtudiantService;
+    @Autowired public EmploiDuTempsRepository emploiDuTempsRepository;
 
-    @Autowired
-    public AbsenceRepository abscencesRepository;
-    @Autowired
-    public SeanceRepository seanceRepository;
+    private static final List<String> NOMS_JOURS =
+            List.of("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche");
 
-    private static final List<String> NOMS_JOURS = List.of("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi",
-            "Dimanche");
-
-    private static final List<String> COULEURS_MATIERE = List.of("math", "french", "science", "history");
-
-    @GetMapping("/etudiant/abscences")
-    public String abscences(Model model, HttpSession session) {
-        ProfilEtudiant profilEtudiant = profilEtudiantService.findById(1L).orElse(null);
-        if (profilEtudiant == null)
-            return "redirect:/";
-
-        List<Absence> listeAbscences = abscencesRepository.listeAbsencesEtudiant(profilEtudiant.getId().intValue());
-        List<Map<String, Object>> absencesDetails = new ArrayList<>();
-
-        for (Absence absence : listeAbscences) {
-            Map<String, Object> detail = new LinkedHashMap<>();
-            detail.put("absence", absence);
-            detail.put("date", null);
-            detail.put("heure", "Horaire non renseigne");
-            detail.put("matiere", "Matiere non renseignee");
-            detail.put("professeur", "Professeur non renseigne");
-            detail.put("salle", "Salle non renseignee");
-
-            if (absence.getSeanceId() != null) {
-                Seance seance = seanceRepository.findById(absence.getSeanceId()).orElse(null);
-                if (seance != null) {
-                    detail.put("date", seance.getDateSeance());
-                    detail.put("heure", formatHeure(seance.getHeureDebut()) + " - " + formatHeure(seance.getHeureFin()));
-
-                    if (seance.getEmploiDuTempsId() != null) {
-                        EmploiDuTemps emploiDuTemps = emploiDuTempsRepository
-                                .findById(seance.getEmploiDuTempsId().longValue())
-                                .orElse(null);
-                        if (emploiDuTemps != null) {
-                            AffectationEnseignement affectation = emploiDuTemps.getAffectation();
-                            if (affectation != null) {
-                                if (affectation.getMatiere() != null) {
-                                    detail.put("matiere", affectation.getMatiere().getNom());
-                                }
-                                if (affectation.getProfesseur() != null) {
-                                    String prenom = affectation.getProfesseur().getPrenom() != null
-                                            ? affectation.getProfesseur().getPrenom() + " "
-                                            : "";
-                                    String nom = affectation.getProfesseur().getNom() != null
-                                            ? affectation.getProfesseur().getNom()
-                                            : "";
-                                    detail.put("professeur", "Prof. " + (prenom + nom).trim());
-                                }
-                            }
-                            if (emploiDuTemps.getSalle() != null) {
-                                detail.put("salle", emploiDuTemps.getSalle().getNom());
-                            }
-                        }
-                    }
-                }
-            }
-
-            absencesDetails.add(detail);
-        }
-
-        long totalAbsences = listeAbscences.size();
-        long absencesJustifiees = listeAbscences.stream()
-                .filter(a -> "justifiee".equalsIgnoreCase(a.getType()))
-                .count();
-        long absencesNonJustifiees = totalAbsences - absencesJustifiees;
-        long absencesValidees = listeAbscences.stream()
-                .filter(a -> a.getDateValidation() != null || a.getValidePar() != null)
-                .count();
-
-        model.addAttribute("pageTitle", "Mes abscences");
-        model.addAttribute("currentRole", "etudiant");
-        model.addAttribute("user", null);
-        model.addAttribute("profilEtudiant", profilEtudiant);
-        model.addAttribute("listeAbscences", listeAbscences);
-        model.addAttribute("absencesDetails", absencesDetails);
-        model.addAttribute("totalAbsences", totalAbsences);
-        model.addAttribute("absencesJustifiees", absencesJustifiees);
-        model.addAttribute("absencesNonJustifiees", absencesNonJustifiees);
-        model.addAttribute("absencesValidees", absencesValidees);
-
-        return "Etudiant/abscences";
-    }
+    private static final List<String> COULEURS_MATIERE =
+            List.of("math", "french", "science", "history");
 
     @GetMapping("/etudiant/emploi")
     public String emploi(Model model, HttpSession session) {
-
-        // Récupération de l'utilisateur connecté depuis la session (Répare
-        // 'userLoggedIn cannot be resolved')
+        
+        // Récupération de l'utilisateur connecté depuis la session (Répare 'userLoggedIn cannot be resolved')
         User userLoggedIn = (User) session.getAttribute("user");
 
         ProfilEtudiant profilEtudiant = profilEtudiantService.findById(1L).orElse(null);
-        if (profilEtudiant == null)
-            return "redirect:/";
-
+        if (profilEtudiant == null) return "redirect:/";
+        
         Long etudiantId = profilEtudiant.getId();
 
         // Classe de l'étudiant via son inscription active
@@ -205,7 +105,7 @@ public class EtudiantController {
             boolean dejaPresent = creneaux.stream()
                     .anyMatch(c -> c[0].equals(s.getHeureDebut()) && c[1].equals(s.getHeureFin()));
             if (!dejaPresent) {
-                creneaux.add(new LocalTime[] { s.getHeureDebut(), s.getHeureFin() });
+                creneaux.add(new LocalTime[]{s.getHeureDebut(), s.getHeureFin()});
             }
         }
         creneaux.sort(Comparator.comparing(c -> c[0]));
@@ -270,22 +170,23 @@ public class EtudiantController {
     }
 
     private String formatHeure(LocalTime t) {
-        if (t == null)
-            return "";
+        if (t == null) return "";
         return (t.getMinute() == 0)
                 ? t.getHour() + "h"
                 : String.format("%dh%02d", t.getHour(), t.getMinute());
     }
 
+    
+    
     @GetMapping("/etudiant/notes")
     public String notes(
             Model model,
             HttpSession session,
-            @RequestParam(name = "periodeId", required = false) Long periodeId) {
+            @RequestParam(name = "periodeId", required = false) Long periodeId
+    ) {
         ProfilEtudiant profilEtudiant = profilEtudiantService.findById(1L).orElse(null);
 
-        if (profilEtudiant == null)
-            return "redirect:/";
+        if (profilEtudiant == null) return "redirect:/";
 
         Long etudiantId = profilEtudiant.getId();
 
@@ -326,24 +227,22 @@ public class EtudiantController {
         // Grouper par matière : matiereNom → { moyenne, coeff, professeur, détails[] }
         Map<String, Map<String, Object>> groupes = new LinkedHashMap<>();
         for (Note note : notesbrutes) {
-            if (note.getAffectation() == null || note.getAffectation().getMatiere() == null)
-                continue;
+            if (note.getAffectation() == null || note.getAffectation().getMatiere() == null) continue;
             String matiereNom = note.getAffectation().getMatiere().getNom();
-            Long matiereId = note.getAffectation().getMatiere().getId();
-            BigDecimal coeff = coefficientsMap.getOrDefault(matiereId, BigDecimal.ONE);
+            Long matiereId    = note.getAffectation().getMatiere().getId();
+            BigDecimal coeff  = coefficientsMap.getOrDefault(matiereId, BigDecimal.ONE);
             String prof = note.getAffectation().getProfesseur() != null
-                    ? note.getAffectation().getProfesseur().getPrenom() + " "
-                            + note.getAffectation().getProfesseur().getNom()
+                    ? note.getAffectation().getProfesseur().getPrenom() + " " + note.getAffectation().getProfesseur().getNom()
                     : "—";
 
             groupes.computeIfAbsent(matiereNom, k -> {
                 Map<String, Object> g = new LinkedHashMap<>();
                 g.put("matiereNom", matiereNom);
-                g.put("matiereId", matiereId);
+                g.put("matiereId",  matiereId);
                 g.put("coefficient", coeff);
                 g.put("professeur", prof);
-                g.put("somme", BigDecimal.ZERO);
-                g.put("count", 0);
+                g.put("somme",  BigDecimal.ZERO);
+                g.put("count",  0);
                 g.put("details", new ArrayList<Map<String, Object>>());
                 return g;
             });
@@ -359,8 +258,7 @@ public class EtudiantController {
             // Détail d'une note individuelle
             Map<String, Object> detail = new LinkedHashMap<>();
             detail.put("typeEvaluation", note.getTypeEvaluation() != null
-                    ? note.getTypeEvaluation().replace("_", " ")
-                    : "Note");
+                    ? note.getTypeEvaluation().replace("_", " ") : "Note");
             detail.put("valeur", valSur20);
             detail.put("appreciation", appreciation(valSur20));
             detail.put("cssClass", cssClass(valSur20));
@@ -370,23 +268,23 @@ public class EtudiantController {
         // Finaliser chaque groupe : calculer la moyenne
         List<Map<String, Object>> notesGroupees = new ArrayList<>();
         for (Map<String, Object> g : groupes.values()) {
-            int count = (int) g.get("count");
+            int count        = (int) g.get("count");
             BigDecimal somme = (BigDecimal) g.get("somme");
             BigDecimal moyenne = count > 0
                     ? somme.divide(BigDecimal.valueOf(count), 2, RoundingMode.HALF_UP)
                     : BigDecimal.ZERO;
-            g.put("moyenne", moyenne);
+            g.put("moyenne",      moyenne);
             g.put("appreciation", appreciation(moyenne));
-            g.put("cssClass", cssClass(moyenne));
+            g.put("cssClass",     cssClass(moyenne));
             notesGroupees.add(g);
         }
 
-        model.addAttribute("pageTitle", "Mes Notes");
-        model.addAttribute("currentRole", "etudiant");
-        model.addAttribute("user", null);
-        model.addAttribute("profilEtudiant", profilEtudiant);
-        model.addAttribute("notesGroupees", notesGroupees);
-        model.addAttribute("periodes", periodes);
+        model.addAttribute("pageTitle",           "Mes Notes");
+        model.addAttribute("currentRole",         "etudiant");
+        model.addAttribute("user",                null);
+        model.addAttribute("profilEtudiant",      profilEtudiant);
+        model.addAttribute("notesGroupees",        notesGroupees);
+        model.addAttribute("periodes",            periodes);
         model.addAttribute("periodeSelectionnee", periodeSelectionnee);
         return "Etudiant/notes";
     }
@@ -395,8 +293,7 @@ public class EtudiantController {
     public String devoirs(Model model, HttpSession session) {
         ProfilEtudiant profilEtudiant = profilEtudiantService.findById(1L).orElse(null);
 
-        if (profilEtudiant == null)
-            return "redirect:/";
+        if (profilEtudiant == null) return "redirect:/";
 
         List<Inscription> inscriptions = inscriptionRepository.findActiveByEtudiant(profilEtudiant.getId());
         Long classeId = inscriptions.isEmpty() ? null : inscriptions.get(0).getClasseId();
@@ -426,11 +323,11 @@ public class EtudiantController {
     public String bulletin(
             Model model,
             HttpSession session,
-            @RequestParam(name = "periodeId", required = false) Long periodeId) {
+            @RequestParam(name = "periodeId", required = false) Long periodeId
+    ) {
         ProfilEtudiant profilEtudiant = profilEtudiantService.findById(1L).orElse(null);
 
-        if (profilEtudiant == null)
-            return "redirect:/";
+        if (profilEtudiant == null) return "redirect:/";
 
         Long etudiantId = profilEtudiant.getId();
 
@@ -487,8 +384,7 @@ public class EtudiantController {
         // Structure : matiereNom -> {moyenne, coefficient, appreciation}
         Map<String, Map<String, Object>> lignesBulletin = new LinkedHashMap<>();
         for (Note note : notes) {
-            if (note.getAffectation() == null || note.getAffectation().getMatiere() == null)
-                continue;
+            if (note.getAffectation() == null || note.getAffectation().getMatiere() == null) continue;
             String matiereNom = note.getAffectation().getMatiere().getNom();
             Long matiereId = note.getAffectation().getMatiere().getId();
             BigDecimal coeff = coefficientsMap.getOrDefault(matiereId, BigDecimal.ONE);
@@ -556,8 +452,7 @@ public class EtudiantController {
                 final Map<Long, BigDecimal> coeffMap = coefficientsMap;
                 Map<Long, Map<Long, BigDecimal[]>> notesByEtudiantMatiere = new java.util.HashMap<>();
                 for (Note n : notesClasse) {
-                    if (n.getAffectation() == null || n.getAffectation().getMatiere() == null)
-                        continue;
+                    if (n.getAffectation() == null || n.getAffectation().getMatiere() == null) continue;
                     Long eid = n.getEtudiantId();
                     Long mid = n.getAffectation().getMatiere().getId();
                     BigDecimal valSur20 = n.getSur() != null && n.getSur().compareTo(BigDecimal.ZERO) > 0
@@ -565,7 +460,7 @@ public class EtudiantController {
                             : n.getValeur();
                     notesByEtudiantMatiere
                             .computeIfAbsent(eid, k -> new java.util.HashMap<>())
-                            .computeIfAbsent(mid, k -> new BigDecimal[] { BigDecimal.ZERO, BigDecimal.ZERO });
+                            .computeIfAbsent(mid, k -> new BigDecimal[]{BigDecimal.ZERO, BigDecimal.ZERO});
                     BigDecimal[] acc = notesByEtudiantMatiere.get(eid).get(mid);
                     acc[0] = acc[0].add(valSur20);
                     acc[1] = acc[1].add(BigDecimal.ONE);
@@ -595,8 +490,7 @@ public class EtudiantController {
                 BigDecimal moyenneEtudiant = moyenneParEtudiant.getOrDefault(etudiantId, BigDecimal.ZERO);
                 rang = 1;
                 for (BigDecimal m : moyenneParEtudiant.values()) {
-                    if (m.compareTo(moyenneEtudiant) > 0)
-                        rang++;
+                    if (m.compareTo(moyenneEtudiant) > 0) rang++;
                 }
             }
         } catch (Exception e) {
@@ -620,32 +514,22 @@ public class EtudiantController {
     }
 
     private String appreciation(BigDecimal moy) {
-        if (moy == null)
-            return "";
+        if (moy == null) return "";
         double v = moy.doubleValue();
-        if (v >= 16)
-            return "Excellent";
-        if (v >= 14)
-            return "Très bien";
-        if (v >= 12)
-            return "Bien";
-        if (v >= 10)
-            return "Assez bien";
-        if (v >= 8)
-            return "Passable";
+        if (v >= 16) return "Excellent";
+        if (v >= 14) return "Très bien";
+        if (v >= 12) return "Bien";
+        if (v >= 10) return "Assez bien";
+        if (v >= 8)  return "Passable";
         return "Insuffisant";
     }
 
     private String cssClass(BigDecimal moy) {
-        if (moy == null)
-            return "";
+        if (moy == null) return "";
         double v = moy.doubleValue();
-        if (v >= 14)
-            return "grade-excellent";
-        if (v >= 12)
-            return "grade-good";
-        if (v >= 10)
-            return "grade-average";
+        if (v >= 14) return "grade-excellent";
+        if (v >= 12) return "grade-good";
+        if (v >= 10) return "grade-average";
         return "grade-low";
     }
 
