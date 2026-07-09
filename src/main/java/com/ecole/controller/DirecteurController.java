@@ -1,48 +1,27 @@
 package com.ecole.controller;
 
+import com.ecole.entity.*;
+import com.ecole.service.EdtService;
+import com.ecole.service.InitializeService;
+import com.ecole.service.EmployeService;
+import com.ecole.service.EtudiantFilterService;
+import com.ecole.service.StatistiquesElevesService;
+import com.ecole.dto.Directeur.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.data.domain.Page;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.ecole.dto.Directeur.AffectationDetailDTO;
-import com.ecole.dto.Directeur.CreneauDTO;
-import com.ecole.dto.Directeur.EtudiantFilterCriteria;
-import com.ecole.dto.Directeur.EtudiantFilterResult;
-import com.ecole.dto.Directeur.StatistiquesElevesCriteria;
-import com.ecole.dto.Directeur.StatistiquesElevesResponse;
-import com.ecole.entity.AnneeScolaire;
-import com.ecole.entity.Classe;
-import com.ecole.entity.Etablissement;
-import com.ecole.entity.HoraireEdt;
-import com.ecole.entity.Matiere;
-import com.ecole.entity.Niveau;
-import com.ecole.entity.Salle;
-import com.ecole.entity.VueEmployesDetail;
-import com.ecole.service.EdtService;
-import com.ecole.service.EmployeService;
-import com.ecole.service.EtudiantFilterService;
-import com.ecole.service.InitializeService;
-import com.ecole.service.StatistiquesElevesService;
-
-import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
@@ -84,7 +63,7 @@ public class DirecteurController {
         model.addAttribute("matieres", matiereService.findAll());
         model.addAttribute("typesContrats", typesContratsEmployesService.findAll());
         
-        // Treat empty strings as null klhjkghugc
+        // Treat empty strings as null
         String normalizedKeyword = (keyword != null && !keyword.trim().isEmpty()) ? keyword : null;
         String normalizedRole = (role != null && !role.trim().isEmpty()) ? role : null;
         
