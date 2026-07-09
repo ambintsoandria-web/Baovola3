@@ -23,3 +23,7 @@ CREATE TABLE lecons (
 );
 
 Alter table note add COLUMN trimestre VARCHAR(250);
+
+
+
+SELECT * FROM absences where etudiant_id = 1;
